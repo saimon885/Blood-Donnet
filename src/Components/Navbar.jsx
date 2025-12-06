@@ -1,5 +1,6 @@
 import React from "react";
 import Logo from "../assets/Logo.png";
+import { Link } from "react-router";
 const Navbar = () => {
   const Links = (
     <div className=" flex md:flex-row flex-col gap-4">
@@ -21,7 +22,7 @@ const Navbar = () => {
       </div>
       <div className="navbar-end">
         <div className="hidden lg:block">
-          <a className="btn ">Button</a>
+          <Link to={"/login"} className="btn bg-white border-0">LogIn</Link>
         </div>
         <div>
           <div className="dropdown">
