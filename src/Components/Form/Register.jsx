@@ -49,8 +49,8 @@ const Register = () => {
     setShow(!show);
   };
   return (
-    <div className="hero my-15">
-      <div className="card bg-base-100 w-full max-w-xl shrink-0 shadow-2xl">
+    <div className="hero my-15 px-5">
+      <div className="card bg-base-100 border border-primary w-full max-w-xl shrink-0 shadow-2xl">
         <div className="card-body">
           <h1 className="text-3xl text-center font-bold">
             Create Your Account!
