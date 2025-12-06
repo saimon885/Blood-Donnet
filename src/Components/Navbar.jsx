@@ -1,10 +1,10 @@
 import React from "react";
 import Logo from "../assets/Logo.png";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 const Navbar = () => {
   const Links = (
     <div className=" flex md:flex-row flex-col gap-4">
-      <a>Home</a>
+      <NavLink to={"/"}>Home</NavLink>
       <a>About</a>
     </div>
   );

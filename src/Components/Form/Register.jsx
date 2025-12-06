@@ -41,16 +41,16 @@ const Register = () => {
     return [];
   };
 
-
   const handleRegister = (data) => {
     console.log(data);
+    // another register
   };
   const handleShowOf = () => {
     setShow(!show);
   };
   return (
     <div className="hero my-15">
-      <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+      <div className="card bg-base-100 w-full max-w-xl shrink-0 shadow-2xl">
         <div className="card-body">
           <h1 className="text-3xl text-center font-bold">
             Create Your Account!
@@ -81,11 +81,12 @@ const Register = () => {
               <fieldset className="fieldset">
                 <legend className="fieldset-legend">Blood Group</legend>
                 <select
-                  {...register("Blood")}
+                  {...register("Blood", { required: true })}
                   defaultValue="Pick a blood"
                   className="select w-full"
                 >
                   <option disabled={true}>Pick a Group</option>
+
                   <option>A+</option>
                   <option>A-</option>
                   <option>B+</option>
@@ -101,7 +102,7 @@ const Register = () => {
                   <legend className="fieldset-legend">District</legend>
 
                   <select
-                    {...register("district")}
+                    {...register("district", { required: true })}
                     defaultValue="Pick a District"
                     className="select w-full"
                   >
@@ -118,7 +119,7 @@ const Register = () => {
                 <fieldset className="fieldset w-full">
                   <legend className="fieldset-legend">Upazila</legend>
                   <select
-                    {...register("upazila")} // register name 'upazila'
+                    {...register("upazila", { required: true })} // register name 'upazila'
                     defaultValue="Pick an Upazila"
                     className="select w-full"
                   >
