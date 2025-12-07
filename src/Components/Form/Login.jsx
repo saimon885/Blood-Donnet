@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router";
+import UseAuth from "../../AuthProvider/UseAuth";
 
 const Login = () => {
+  // const { user } = UseAuth();
   const [show, setShow] = useState(true);
   const { register, handleSubmit } = useForm();
   const handleShowOf = () => {

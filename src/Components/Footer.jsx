@@ -60,13 +60,13 @@ const Footer = () => {
               <span>
                 <FaPhoneAlt color="#d72050" size={18} />
               </span>
-              <span>(+1800)456-789</span>
+              <span>+8801400678673</span>
             </a>
             <a className="link link-hover flex gap-3 text-[#4e4e4ee0]">
               <span>
                 <FiMail color="#d72050" size={18} />
               </span>
-              <span>Contact@example.com</span>
+              <span>mdsaimonhossanfff@gmail.com</span>
             </a>
             <a className="link link-hover flex gap-3 text-[#4e4e4ee0]">
               <span>

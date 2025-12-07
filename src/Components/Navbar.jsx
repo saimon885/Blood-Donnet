@@ -3,9 +3,9 @@ import Logo from "../assets/Logo.png";
 import { Link, NavLink } from "react-router";
 const Navbar = () => {
   const Links = (
-    <div className=" flex md:flex-row flex-col gap-4">
-      <NavLink to={"/"}>Home</NavLink>
-      <a>About</a>
+    <div className=" flex md:flex-row flex-col gap-2 md:gap-4">
+      <NavLink className={"hover:bg-amber-500 p-1 pl-2 rounded"} to={"/"}>Home</NavLink>
+      <a className="hover:bg-amber-500 p-1 pl-2 rounded">About</a>
     </div>
   );
   return (
@@ -22,7 +22,9 @@ const Navbar = () => {
       </div>
       <div className="navbar-end">
         <div className="hidden lg:block">
-          <Link to={"/login"} className="btn bg-white border-0">LogIn</Link>
+          <Link to={"/login"} className="btn bg-white border-0">
+            LogIn
+          </Link>
         </div>
         <div>
           <div className="dropdown">
@@ -51,14 +53,16 @@ const Navbar = () => {
                   aria-label="close sidebar"
                   className="drawer-overlay"
                 ></label>
-                <ul className="menu bg-[#ffffffb0] mt-20 mr-5 min-h-[450px] w-70 rounded-2xl border border-4xl border-primary  p-4">
+                <ul className="menu bg-[#ffffff] mt-20 mr-2 min-h-[450px] w-70 rounded-2xl border border-4xl border-primary  p-4">
                   {/* Sidebar content here */}
                   <div>
-                    <h2 className="text-3xl font-bold text-primary">Menu</h2>
+                    <h2 className="text-3xl font-bold text-primary mb-4">
+                      Menu
+                    </h2>
                   </div>
-                  {Links}
-                  <div>
-                    <button className="btn">Button</button>
+                  <ul className="text-[18px]">{Links}</ul>
+                  <div className="mt-8 w-full">
+                    <Link to={"/login"} className="btn w-full btn-secondary">Log In</Link>
                   </div>
                 </ul>
               </div>
