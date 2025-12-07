@@ -5,6 +5,7 @@ import UseAuth from "../AuthProvider/UseAuth";
 import { toast } from "react-toastify";
 const Navbar = () => {
   const { user, LogOutUser } = UseAuth();
+  console.log(user);
   const [isHovering, setIsHovering] = useState(false);
   const handleMouseEnter = () => {
     setIsHovering(true);
@@ -18,6 +19,12 @@ const Navbar = () => {
     <div className=" flex md:flex-row flex-col gap-2 md:gap-4">
       <NavLink className={"hover:bg-amber-500 p-1 pl-2 rounded"} to={"/"}>
         Home
+      </NavLink>
+      <NavLink
+        className={"hover:bg-amber-500 p-1 pl-2 rounded"}
+        to={"/dashboard"}
+      >
+        DashBoard
       </NavLink>
       <a className="hover:bg-amber-500 p-1 pl-2 rounded">About</a>
     </div>
@@ -45,19 +52,16 @@ const Navbar = () => {
         <div className="hidden lg:block">
           <div className="flex items-center gap-1">
             {user && (
-              <Link
-                to={"/userprofile"}
-                className="rounded-full relative inline-block w-[60px] p-2 mr-2"
-              >
+              <Link className="relative inline-block w-[60px] h-[60px] p-2 mr-2">
                 <img
                   onMouseEnter={handleMouseEnter}
                   onMouseLeave={handleMouseLeave}
-                  className="rounded-full border-2 border-green-700 mx-auto"
+                  className="rounded-full border-2 border-green-700 mx-auto h-full w-full object-cover"
                   src={`${user ? user.photoURL : ""}`}
-                  alt=""
+                  alt="User Profile"
                 />
                 {user && isHovering && (
-                  <div className="absolute -top-2  md:-top-1 right-14 md:right-16 p-5 text-white z-10 flex-nowrap">
+                  <div className="absolute -top-2 md:-top-1 right-14 md:right-16 p-5 text-white z-10 flex-nowrap">
                     {user.displayName}
                   </div>
                 )}
@@ -86,19 +90,16 @@ const Navbar = () => {
                 <div>
                   {" "}
                   {user && (
-                    <Link
-                      to={"/userprofile"}
-                      className="rounded-full relative mt-1 inline-block w-[50px] p-2 mr-2"
-                    >
+                    <Link className="relative inline-block w-[60px] h-[60px] p-2 mr-2">
                       <img
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
-                        className="rounded-full mx-auto"
+                        className="rounded-full border-2 border-green-700 mx-auto h-full w-full object-cover"
                         src={`${user ? user.photoURL : ""}`}
-                        alt=""
+                        alt="User Profile"
                       />
                       {user && isHovering && (
-                        <div className="absolute -top-2  md:-top-1 right-14 md:right-16 p-5 text-white z-10 flex-nowrap">
+                        <div className="absolute -top-2 md:-top-1 right-14 md:right-16 p-5 text-white z-10 flex-nowrap">
                           {user.displayName}
                         </div>
                       )}

@@ -5,9 +5,11 @@ import { Link, useLoaderData, useLocation, useNavigate } from "react-router";
 import UseAuth from "../../AuthProvider/UseAuth";
 import axios from "axios";
 import { toast } from "react-toastify";
+import UseAxiosSecure from "../../AuthProvider/UseAxiosSecure";
 
 const Register = () => {
   const [show, setShow] = useState(true);
+  const axiosSecure = UseAxiosSecure();
   const { CreateUser, UpdateUser } = UseAuth();
   const location = useLocation();
   const from = location.state || "/";
@@ -48,35 +50,56 @@ const Register = () => {
     return [];
   };
 
-  const handleRegister = (data) => {
-    console.log(data);
-    const ProfileImg = data.photo[0];
-    console.log(ProfileImg);
-    CreateUser(data.email, data.password)
-      .then(() => {
-        toast.success("register successfully");
-        navigate(from);
-        const formData = new FormData();
-        formData.append("image", ProfileImg);
-        const Image_Api_Url = `https://api.imgbb.com/1/upload?key=${
-          import.meta.env.VITE_Imagehost_API_key
-        }`;
-        axios.post(Image_Api_Url, formData).then((res) => {
-          // update your profile
-          // Database Post API
+  const handleRegister = async (data) => {
+    try {
+      const ProfileImg = data.photo[0];
 
-          const UserProfile = {
-            displayName: data.name,
-            photoURL: res.data.data.url,
-          };
-          UpdateUser(UserProfile).then().catch();
-        });
-      })
-      .catch((error) => {
-        toast.error(error.code);
+      // Create user
+      await CreateUser(data.email, data.password);
+
+      // Upload Image
+      const formData = new FormData();
+      formData.append("image", ProfileImg);
+
+      const Image_Api_Url = `https://api.imgbb.com/1/upload?key=${
+        import.meta.env.VITE_Imagehost_API_key
+      }`;
+
+      const imgRes = await axios.post(Image_Api_Url, formData);
+      const imageUrl = imgRes.data.data.url;
+
+      // Save to Database
+      const userInfo = {
+        displayName: data.name,
+        photoURL: imageUrl,
+        email: data.email,
+        bloodGroup: data.Blood,
+        district: data.district,
+        upazila: data.upazila,
+      };
+
+      const dbRes = await axiosSecure.post("/users", userInfo);
+
+      if (!dbRes.data.insertedId) {
+        throw new Error("Database insert failed");
+      }
+
+      // Update Firebase Profile
+      await UpdateUser({
+        displayName: data.name,
+        photoURL: imageUrl,
       });
-    // another register
+
+      toast.success("Register successful ✅");
+
+      // ✅ Navigate only after everything complete
+      navigate(from);
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message || "Something went wrong");
+    }
   };
+
   const handleShowOf = () => {
     setShow(!show);
   };
@@ -114,7 +137,7 @@ const Register = () => {
                 <legend className="fieldset-legend">Blood Group</legend>
                 <select
                   {...register("Blood", { required: true })}
-                  defaultValue="Pick  a Group"
+                  defaultValue="Pick a Group"
                   className="select rounded-2xl w-full"
                 >
                   <option disabled={true}>Pick a Group</option>
