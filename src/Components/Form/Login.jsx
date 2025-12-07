@@ -1,18 +1,28 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import UseAuth from "../../AuthProvider/UseAuth";
+import { toast } from "react-toastify";
 
 const Login = () => {
-  // const { user } = UseAuth();
+  const { SignInUser } = UseAuth();
   const [show, setShow] = useState(true);
+  const location = useLocation();
+  const from = location.state || "/";
+  const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
   const handleShowOf = () => {
     setShow(!show);
   };
   const handleSignIn = (data) => {
     console.log(data);
+    SignInUser(data.email, data.password)
+      .then(() => {
+        toast.success("Sign in Successfull.")
+        navigate(from);
+      })
+      .catch();
   };
   return (
     <div className="hero my-15">

@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link, useLoaderData } from "react-router";
+import { Link, useLoaderData, useLocation, useNavigate } from "react-router";
+import UseAuth from "../../AuthProvider/UseAuth";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [show, setShow] = useState(true);
+  const { CreateUser, UpdateUser } = UseAuth();
+  const location = useLocation();
+  const from = location.state || "/";
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -43,6 +50,31 @@ const Register = () => {
 
   const handleRegister = (data) => {
     console.log(data);
+    const ProfileImg = data.photo[0];
+    console.log(ProfileImg);
+    CreateUser(data.email, data.password)
+      .then(() => {
+        toast.success("register successfully");
+        navigate(from);
+        const formData = new FormData();
+        formData.append("image", ProfileImg);
+        const Image_Api_Url = `https://api.imgbb.com/1/upload?key=${
+          import.meta.env.VITE_Imagehost_API_key
+        }`;
+        axios.post(Image_Api_Url, formData).then((res) => {
+          // update your profile
+          // Database Post API
+
+          const UserProfile = {
+            displayName: data.name,
+            photoURL: res.data.data.url,
+          };
+          UpdateUser(UserProfile).then().catch();
+        });
+      })
+      .catch((error) => {
+        toast.error(error.code);
+      });
     // another register
   };
   const handleShowOf = () => {
@@ -82,8 +114,8 @@ const Register = () => {
                 <legend className="fieldset-legend">Blood Group</legend>
                 <select
                   {...register("Blood", { required: true })}
-                  defaultValue="Pick a blood"
-                  className="select w-full"
+                  defaultValue="Pick  a Group"
+                  className="select rounded-2xl w-full"
                 >
                   <option disabled={true}>Pick a Group</option>
 
@@ -104,7 +136,7 @@ const Register = () => {
                   <select
                     {...register("district", { required: true })}
                     defaultValue="Pick a District"
-                    className="select w-full"
+                    className="select rounded-2xl w-full"
                   >
                     <option disabled={true}>Pick a District</option>
 
@@ -121,7 +153,7 @@ const Register = () => {
                   <select
                     {...register("upazila", { required: true })} // register name 'upazila'
                     defaultValue="Pick an Upazila"
-                    className="select w-full"
+                    className="select rounded-2xl w-full"
                   >
                     <option disabled={true}>Pick an Upazila</option>
                     {getUpazilasByDistrictName(selectedDistrictName).map(

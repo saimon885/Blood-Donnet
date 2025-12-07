@@ -5,10 +5,12 @@ import App from "./App.jsx";
 import { RouterProvider } from "react-router";
 import { router } from "./Utility/Router.jsx";
 import AuthProvider from "./AuthProvider/AuthProvider.jsx";
+import { ToastContainer } from "react-toastify";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
+      <ToastContainer />
       <RouterProvider router={router}></RouterProvider>
     </AuthProvider>
   </StrictMode>
