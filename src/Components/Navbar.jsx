@@ -5,7 +5,7 @@ import UseAuth from "../AuthProvider/UseAuth";
 import { toast } from "react-toastify";
 const Navbar = () => {
   const { user, LogOutUser } = UseAuth();
-  console.log(user);
+  // console.log(user);
   const [isHovering, setIsHovering] = useState(false);
   const handleMouseEnter = () => {
     setIsHovering(true);

@@ -92,10 +92,9 @@ const Register = () => {
 
       toast.success("Register successful ✅");
 
-      // ✅ Navigate only after everything complete
       navigate(from);
     } catch (error) {
-      console.error(error);
+      
       toast.error(error.message || "Something went wrong");
     }
   };

@@ -2,6 +2,7 @@ import React from "react";
 import Logo from "../assets/DashboardMainLogo.png";
 import { Link, Outlet } from "react-router";
 import { FaUser } from "react-icons/fa";
+import { MdCreateNewFolder } from "react-icons/md";
 const DashBoardLayout = () => {
   return (
     <div className="drawer lg:drawer-open">
@@ -73,8 +74,18 @@ const DashBoardLayout = () => {
                 className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                 data-tip="Profile"
               >
-               <FaUser />
+                <FaUser />
                 <span className="is-drawer-close:hidden">Profile</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={"/dashboard/create-donation-request"}
+                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                data-tip="Create Donetion"
+              >
+                <MdCreateNewFolder />
+                <span className="is-drawer-close:hidden">Create Donetion</span>
               </Link>
             </li>
             <li>

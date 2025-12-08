@@ -6,6 +6,7 @@ import Register from "../Components/Form/Register";
 import PrivetRoute from "../AuthProvider/PrivetRoute";
 import DashBoardLayout from "../Layouts/DashBoardLayout";
 import Profile from "../DashboardRelated/Profile";
+import CreateDonor from "../DashboardRelated/CreateDonor";
 
 export const router = createBrowserRouter([
   {
@@ -39,6 +40,12 @@ export const router = createBrowserRouter([
       {
         path: "Profile",
         Component: Profile,
+        loader: () => fetch("/district.json"),
+      },
+      {
+        path: "create-donation-request",
+        Component: CreateDonor,
+        loader: () => fetch("/district.json"),
       },
     ],
   },

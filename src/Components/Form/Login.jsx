@@ -16,7 +16,7 @@ const Login = () => {
     setShow(!show);
   };
   const handleSignIn = (data) => {
-    console.log(data);
+    // console.log(data);
     SignInUser(data.email, data.password)
       .then(() => {
         toast.success("Sign in Successfull.")
