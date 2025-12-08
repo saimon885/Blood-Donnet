@@ -1,223 +1,188 @@
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import UseAuth from "../AuthProvider/UseAuth";
+import { useLoaderData } from "react-router";
 
 const CreateDonor = () => {
   const { user } = UseAuth();
-  const {
-    register,
-    handleSubmit,
-    control,
-    // formState: { errors },
-  } = useForm();
-  const handleCreateDonor = () => {};
+  const { register, handleSubmit, control } = useForm();
+  const [allUpazila, setAllUpazila] = useState([]);
+  useEffect(() => {
+    fetch("/upazila.json")
+      .then((res) => res.json())
+      .then((data) => {
+        setAllUpazila(data);
+      })
+      .catch((err) => console.error("Error loading upazila data:", err));
+  }, []);
+
+  const DistrictData = useLoaderData();
+  const DistrictDuplicate = DistrictData.map((c) => c.name);
+
+  const selectedSenderRegion = useWatch({ control, name: "recipentDistrict" });
+
+  const getDistrictIdByName = (districtName) => {
+    const districtObject = DistrictData.find((d) => d.name === districtName);
+    return districtObject ? String(districtObject.id) : null;
+  };
+
+  const getUpazilasByDistrictName = (districtName) => {
+    const targetDistrictId = getDistrictIdByName(districtName);
+
+    if (targetDistrictId && allUpazila.length > 0) {
+      const upazilas = allUpazila.filter(
+        (u) => u.district_id === targetDistrictId
+      );
+
+      return upazilas.map((u) => u.name);
+    }
+    return [];
+  };
+
+  const handleCreateDonor = (data) => {
+    console.log("Form Data:", data);
+  };
+
   return (
     <div>
       <div>
         <form onSubmit={handleSubmit(handleCreateDonor)}>
           <fieldset className="fieldset">
-            <div className="flex gap-5">
-              <label className="label">
-                <input
-                  type="radio"
-                  value="document"
-                  className="radio"
-                  {...register("percelType")}
-                  defaultChecked
-                />
-                Document
-              </label>
-              <label className="label">
-                <input
-                  type="radio"
-                  value="non-document"
-                  {...register("percelType")}
-                  className="radio"
-                />
-                Non-Document
-              </label>
-            </div>
-            {/* Percel Name and weight */}
-            <div className="grid grid-cols-2 gap-5 items-center w-full">
+            <div className="grid grid-cols-2 gap-5 w-full">
               <div>
+                {/* Requester name */}
                 <fieldset>
-                  <label className="label">Percel Name</label>
+                  <legend className="fieldset-legend">Your Name</legend>
                   <input
                     type="text"
-                    {...register("percelName")}
+                    {...register("requesterName")}
                     className="input w-full"
-                    placeholder="Percel Name"
-                  />
-                </fieldset>
-                <h3 className="font-bold my-3 text-2xl">Sender Details</h3>
-                <fieldset>
-                  <label className="label">Sender Name</label>
-                  <input
-                    type="text"
-                    {...register("senderName")}
                     defaultValue={user?.displayName}
-                    className="input w-full"
-                    placeholder="Sender Name"
+                    readOnly
                   />
                 </fieldset>
                 <fieldset>
-                  <label className="label">Sender Email</label>
+                  <legend className="fieldset-legend">Your Email</legend>
                   <input
                     type="email"
-                    {...register("senderEmail")}
+                    {...register("requesterEmail")}
                     defaultValue={user?.email}
+                    readOnly
                     className="input w-full"
-                    placeholder="Sender Email"
                   />
                 </fieldset>
-                <fieldset>
-                  <label className="label">Address</label>
-                  <input
-                    type="text"
-                    {...register("senderAddress")}
-                    className="input w-full"
-                    placeholder="Address"
-                  />
-                </fieldset>
-                <fieldset>
-                  <label className="label">Sender Phone Number</label>
-                  <input
-                    type="number"
-                    {...register("senderNumber")}
-                    className="input w-full"
-                    placeholder="Sender Phone Number"
-                  />
-                </fieldset>
-                {/* ekhono onek kicu bojar ace */}
+
                 <fieldset className="fieldset">
-                  <legend className="fieldset-legend">Sender Region</legend>
+                  <legend className="fieldset-legend">Blood Group</legend>
                   <select
-                    {...register("senderRegion")}
-                    defaultValue="Pick a Region"
+                    {...register("Blood", { required: true })}
+                    defaultValue="Pick a Group"
                     className="select w-full"
                   >
-                    <option disabled={true}>Pick a Region</option>
-                    {Regions.map((r, i) => (
-                      <option value={r} key={i}>
-                        {r}
-                      </option>
-                    ))}
+                    <option disabled={true}>Pick a Group</option>
+
+                    <option>A+</option>
+                    <option>A-</option>
+                    <option>B+</option>
+                    <option>B-</option>
+                    <option>O+</option>
+                    <option>O-</option>
+                    <option>AB+</option>
+                    <option>AB-</option>
                   </select>
                 </fieldset>
-                {/* Sender District */}
-                <fieldset className="fieldset">
-                  <legend className="fieldset-legend">Sender District</legend>
-                  <select
-                    {...register("senderDistrict")}
-                    defaultValue="Pick a District"
-                    className="select w-full"
-                  >
-                    <option disabled={true}>Pick a District</option>
-                    {districtByRegion(senderRegion).map((d, i) => (
-                      <option key={i} value={d}>
-                        {d}
-                      </option>
-                    ))}
-                  </select>
-                </fieldset>
-                {/* ekhono onek kicu bojar ace */}
                 <fieldset>
-                  <label className="label">Pickup Instraction</label>
+                  <legend className="fieldset-legend">Donation date</legend>
+                  <input
+                    type="date"
+                    {...register("donetionDate")}
+                    className="input w-full"
+                    placeholder="Enter Date"
+                  />
+                </fieldset>
+                <fieldset>
+                  <legend className="fieldset-legend">Donation Time</legend>
+                  <input
+                    type="time"
+                    {...register("donetionTime")}
+                    className="input w-full"
+                    placeholder="Enter Donation Time"
+                  />
+                </fieldset>
+
+                <fieldset>
+                  <legend className="fieldset-legend">Request message</legend>
                   <textarea
-                    {...register("pickupInstraction")}
-                    className="input w-full"
-                    placeholder="Pickup Instraction"
+                    {...register("requestMessage")}
+                    className="input w-full h-15"
+                    placeholder="Enter Request message"
                   ></textarea>
                 </fieldset>
               </div>
-              {/* reciver */}
+
               <div>
                 <fieldset>
-                  <label className="label">Percel Weight</label>
-                  <input
-                    type="number"
-                    {...register("percelWeight")}
-                    className="input w-full"
-                    placeholder="Percel weight"
-                  />
-                </fieldset>
-                <h3 className="font-bold my-3 text-2xl">Reciver Details</h3>
-                <fieldset>
-                  <label className="label">Reciver Name</label>
+                  <legend className="fieldset-legend">Recipient name</legend>
                   <input
                     type="text"
-                    {...register("ReciverName")}
+                    {...register("Recipient name")}
                     className="input w-full"
-                    placeholder="Reciver Name"
+                    placeholder="Recipient name"
                   />
                 </fieldset>
-                <fieldset>
-                  <label className="label">Reciver Email</label>
-                  <input
-                    type="email"
-                    {...register("reciverEmail")}
-                    className="input w-full"
-                    placeholder="Reciver Email"
-                  />
-                </fieldset>
-                <fieldset>
-                  <label className="label">Reciver Address</label>
-                  <input
-                    type="text"
-                    {...register("reciverAddress")}
-                    className="input w-full"
-                    placeholder="Address"
-                  />
-                </fieldset>
-                <fieldset>
-                  <label className="label">Reciver Phone Number</label>
-                  <input
-                    type="number"
-                    {...register("reciverNumber")}
-                    className="input w-full"
-                    placeholder="Reciver Phone Number"
-                  />
-                </fieldset>
-                {/* onek kicu bojar ace */}
                 <fieldset className="fieldset">
-                  <legend className="fieldset-legend">Reciver Region</legend>
+                  <legend className="fieldset-legend">
+                    Recipient District
+                  </legend>
                   <select
-                    {...register("reciverRegion")}
-                    defaultValue="Pick a Region"
-                    className="select w-full"
-                  >
-                    <option disabled={true}>Pick a Region</option>
-                    {Regions.map((r, i) => (
-                      <option value={r} key={i}>
-                        {r}
-                      </option>
-                    ))}
-                  </select>
-                </fieldset>
-                {/* district */}
-                <fieldset className="fieldset">
-                  <legend className="fieldset-legend">Reciver District</legend>
-                  <select
-                    {...register("reciverDistrict")}
+                    {...register("recipentDistrict")}
                     defaultValue="Pick a District"
                     className="select w-full"
                   >
                     <option disabled={true}>Pick a District</option>
-                    {districtByRegion(reciverRegion).map((d, i) => (
-                      <option key={i} value={d}>
+                    {DistrictDuplicate.map((d, i) => (
+                      <option value={d} key={i}>
                         {d}
                       </option>
                     ))}
                   </select>
                 </fieldset>
 
+                <fieldset className="fieldset">
+                  <legend className="fieldset-legend">Recipient Upazila</legend>
+                  <select
+                    {...register("recipientUpazila")}
+                    defaultValue="Pick a Upazila"
+                    className="select w-full"
+                  >
+                    <option disabled={true}>Pick a Upazila</option>
+
+                    {getUpazilasByDistrictName(selectedSenderRegion).map(
+                      (u, i) => (
+                        <option key={i} value={u}>
+                          {u}
+                        </option>
+                      )
+                    )}
+                  </select>
+                </fieldset>
                 <fieldset>
-                  <label className="label">Delevery Instraction</label>
-                  <textarea
-                    {...register("deleveryInstraction")}
+                  <legend className="fieldset-legend">Hospital Name</legend>
+                  <input
+                    type="text"
+                    {...register("hospitalName")}
                     className="input w-full"
-                    placeholder="Delevery Instraction"
-                  ></textarea>
+                    placeholder="Hospital Name"
+                  />
+                </fieldset>
+                <fieldset>
+                  <legend className="fieldset-legend">Full address Line</legend>
+                  <input
+                    type="text"
+                    {...register("address")}
+                    className="input w-full"
+                    placeholder="Full Address"
+                  />
                 </fieldset>
               </div>
             </div>
@@ -225,7 +190,7 @@ const CreateDonor = () => {
           <input
             className="btn btn-neutral mt-4"
             type="submit"
-            value="Send percel"
+            value="Request"
           />
         </form>
       </div>
