@@ -94,7 +94,6 @@ const Register = () => {
 
       navigate(from);
     } catch (error) {
-      
       toast.error(error.message || "Something went wrong");
     }
   };
@@ -136,10 +135,12 @@ const Register = () => {
                 <legend className="fieldset-legend">Blood Group</legend>
                 <select
                   {...register("Blood", { required: true })}
-                  defaultValue="Pick a Group"
-                  className="select rounded-2xl w-full"
+                  className="select w-full rounded-2xl"
+                  defaultValue={""}
                 >
-                  <option disabled={true}>Pick a Group</option>
+                  <option disabled={true} value={""}>
+                    Pick a Group
+                  </option>
 
                   <option>A+</option>
                   <option>A-</option>
@@ -157,10 +158,11 @@ const Register = () => {
 
                   <select
                     {...register("district", { required: true })}
-                    defaultValue="Pick a District"
                     className="select rounded-2xl w-full"
                   >
-                    <option disabled={true}>Pick a District</option>
+                    <option disabled={true} value={""}>
+                      Pick a District
+                    </option>
 
                     {DistrictDuplicate.map((d, i) => (
                       <option value={d} key={i}>
@@ -174,10 +176,11 @@ const Register = () => {
                   <legend className="fieldset-legend">Upazila</legend>
                   <select
                     {...register("upazila", { required: true })} // register name 'upazila'
-                    defaultValue="Pick an Upazila"
                     className="select rounded-2xl w-full"
                   >
-                    <option disabled={true}>Pick an Upazila</option>
+                    <option disabled={true} value={""}>
+                      Pick an Upazila
+                    </option>
                     {getUpazilasByDistrictName(selectedDistrictName).map(
                       (upazilaName, i) => (
                         <option key={i} value={upazilaName}>

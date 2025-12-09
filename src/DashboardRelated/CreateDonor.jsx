@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import UseAuth from "../AuthProvider/UseAuth";
 import { useLoaderData } from "react-router";
+import UseAxiosSecure from "../AuthProvider/UseAxiosSecure";
 
 const CreateDonor = () => {
   const { user } = UseAuth();
+  const axiosSecure = UseAxiosSecure();
   const { register, handleSubmit, control } = useForm();
   const [allUpazila, setAllUpazila] = useState([]);
   useEffect(() => {
@@ -33,7 +35,6 @@ const CreateDonor = () => {
       const upazilas = allUpazila.filter(
         (u) => u.district_id === targetDistrictId
       );
-
       return upazilas.map((u) => u.name);
     }
     return [];
@@ -41,11 +42,15 @@ const CreateDonor = () => {
 
   const handleCreateDonor = (data) => {
     console.log("Form Data:", data);
+    axiosSecure.post("/donners", data).then((res) => {
+      console.log(res.data);
+    });
   };
 
   return (
     <div>
       <div>
+        <h1 className="text-4xl font-bold text-secondary">Donation Request</h1>
         <form onSubmit={handleSubmit(handleCreateDonor)}>
           <fieldset className="fieldset">
             <div className="grid grid-cols-2 gap-5 w-full">
@@ -55,7 +60,7 @@ const CreateDonor = () => {
                   <legend className="fieldset-legend">Your Name</legend>
                   <input
                     type="text"
-                    {...register("requesterName")}
+                    {...register("requesterName", { required: true })}
                     className="input w-full"
                     defaultValue={user?.displayName}
                     readOnly
@@ -76,10 +81,12 @@ const CreateDonor = () => {
                   <legend className="fieldset-legend">Blood Group</legend>
                   <select
                     {...register("Blood", { required: true })}
-                    defaultValue="Pick a Group"
+                    defaultValue={""}
                     className="select w-full"
                   >
-                    <option disabled={true}>Pick a Group</option>
+                    <option disabled={true} value={""}>
+                      Pick a Group
+                    </option>
 
                     <option>A+</option>
                     <option>A-</option>
@@ -95,7 +102,7 @@ const CreateDonor = () => {
                   <legend className="fieldset-legend">Donation date</legend>
                   <input
                     type="date"
-                    {...register("donetionDate")}
+                    {...register("donetionDate", { required: true })}
                     className="input w-full"
                     placeholder="Enter Date"
                   />
@@ -104,7 +111,7 @@ const CreateDonor = () => {
                   <legend className="fieldset-legend">Donation Time</legend>
                   <input
                     type="time"
-                    {...register("donetionTime")}
+                    {...register("donetionTime", { required: true })}
                     className="input w-full"
                     placeholder="Enter Donation Time"
                   />
@@ -113,7 +120,7 @@ const CreateDonor = () => {
                 <fieldset>
                   <legend className="fieldset-legend">Request message</legend>
                   <textarea
-                    {...register("requestMessage")}
+                    {...register("requestMessage", { required: true })}
                     className="input w-full h-15"
                     placeholder="Enter Request message"
                   ></textarea>
@@ -125,7 +132,7 @@ const CreateDonor = () => {
                   <legend className="fieldset-legend">Recipient name</legend>
                   <input
                     type="text"
-                    {...register("Recipient name")}
+                    {...register("recipientName", { required: true })}
                     className="input w-full"
                     placeholder="Recipient name"
                   />
@@ -135,11 +142,13 @@ const CreateDonor = () => {
                     Recipient District
                   </legend>
                   <select
-                    {...register("recipentDistrict")}
-                    defaultValue="Pick a District"
+                    {...register("recipentDistrict", { required: true })}
+                    defaultValue={""}
                     className="select w-full"
                   >
-                    <option disabled={true}>Pick a District</option>
+                    <option disabled={true} value={""}>
+                      Pick a District
+                    </option>
                     {DistrictDuplicate.map((d, i) => (
                       <option value={d} key={i}>
                         {d}
@@ -151,11 +160,13 @@ const CreateDonor = () => {
                 <fieldset className="fieldset">
                   <legend className="fieldset-legend">Recipient Upazila</legend>
                   <select
-                    {...register("recipientUpazila")}
-                    defaultValue="Pick a Upazila"
+                    {...register("recipientUpazila", { required: true })}
+                    defaultValue={""}
                     className="select w-full"
                   >
-                    <option disabled={true}>Pick a Upazila</option>
+                    <option disabled={true} value={""}>
+                      Pick a Upazila
+                    </option>
 
                     {getUpazilasByDistrictName(selectedSenderRegion).map(
                       (u, i) => (
@@ -170,7 +181,7 @@ const CreateDonor = () => {
                   <legend className="fieldset-legend">Hospital Name</legend>
                   <input
                     type="text"
-                    {...register("hospitalName")}
+                    {...register("hospitalName", { required: true })}
                     className="input w-full"
                     placeholder="Hospital Name"
                   />
@@ -179,7 +190,7 @@ const CreateDonor = () => {
                   <legend className="fieldset-legend">Full address Line</legend>
                   <input
                     type="text"
-                    {...register("address")}
+                    {...register("address", { required: true })}
                     className="input w-full"
                     placeholder="Full Address"
                   />
@@ -188,7 +199,7 @@ const CreateDonor = () => {
             </div>
           </fieldset>
           <input
-            className="btn btn-neutral mt-4"
+            className="btn btn-primary mt-4"
             type="submit"
             value="Request"
           />
