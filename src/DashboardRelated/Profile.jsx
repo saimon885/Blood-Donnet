@@ -19,6 +19,7 @@ const Profile = () => {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm();
   const [allUpazila, setAllUpazila] = useState([]);
@@ -29,8 +30,9 @@ const Profile = () => {
       return res.data;
     },
   });
-  const handleModal = () => {
+  const handleModal = (data) => {
     modalRef.current.showModal();
+    reset(data);
   };
   // console.log(users);
   // profile Updatae Related
@@ -84,7 +86,6 @@ const Profile = () => {
 
       const userInfo = {
         displayName: data.name,
-
         photoURL: newPhotoURL,
         email: data.email,
         bloodGroup: data.Blood,
@@ -180,7 +181,7 @@ const Profile = () => {
 
                 {/* Save Changes Button */}
                 <button
-                  onClick={handleModal}
+                  onClick={() => handleModal(user)}
                   className=" px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 flex items-center gap-2 transition duration-300"
                 >
                   Edit <MdEdit />

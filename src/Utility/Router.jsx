@@ -51,6 +51,7 @@ export const router = createBrowserRouter([
       {
         path: "My-donation-request",
         Component: MyDonnetionRequest,
+        loader: () => fetch("/district.json"),
       },
     ],
   },

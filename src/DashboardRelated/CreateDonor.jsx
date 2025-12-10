@@ -21,7 +21,7 @@ const CreateDonor = () => {
   const DistrictData = useLoaderData();
   const DistrictDuplicate = DistrictData.map((c) => c.name);
 
-  const selectedSenderRegion = useWatch({ control, name: "recipentDistrict" });
+  const selectedDistrictName = useWatch({ control, name: "recipentDistrict" });
 
   const getDistrictIdByName = (districtName) => {
     const districtObject = DistrictData.find((d) => d.name === districtName);
@@ -168,7 +168,7 @@ const CreateDonor = () => {
                       Pick a Upazila
                     </option>
 
-                    {getUpazilasByDistrictName(selectedSenderRegion).map(
+                    {getUpazilasByDistrictName(selectedDistrictName).map(
                       (u, i) => (
                         <option key={i} value={u}>
                           {u}
