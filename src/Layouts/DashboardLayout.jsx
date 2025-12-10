@@ -1,7 +1,7 @@
 import React from "react";
 import Logo from "../assets/DashboardMainLogo.png";
 import { Link, Outlet } from "react-router";
-import { FaHome, FaUser } from "react-icons/fa";
+import { FaFileMedical, FaHome, FaUser, FaUsers } from "react-icons/fa";
 import { MdCreateNewFolder } from "react-icons/md";
 const DashBoardLayout = () => {
   return (
@@ -84,7 +84,7 @@ const DashBoardLayout = () => {
                 className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                 data-tip="My Donetion"
               >
-                <FaHome />
+                <FaFileMedical />
                 <span className="is-drawer-close:hidden">My Donetion</span>
               </Link>
             </li>
@@ -96,6 +96,16 @@ const DashBoardLayout = () => {
               >
                 <MdCreateNewFolder />
                 <span className="is-drawer-close:hidden">Create Donetion</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={"/dashboard/all-users"}
+                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                data-tip="All Users"
+              >
+                <FaUsers />
+                <span className="is-drawer-close:hidden">All Users</span>
               </Link>
             </li>
             <li>

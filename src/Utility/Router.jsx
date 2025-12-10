@@ -8,6 +8,7 @@ import DashBoardLayout from "../Layouts/DashBoardLayout";
 import Profile from "../DashboardRelated/Profile";
 import CreateDonor from "../DashboardRelated/CreateDonor";
 import MyDonnetionRequest from "../DashboardRelated/MyDonnetionRequest";
+import DonnerHome from "../DashboardRelated/DonnerHome";
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +39,11 @@ export const router = createBrowserRouter([
       </PrivetRoute>
     ),
     children: [
+      {
+        index: true,
+        Component: DonnerHome,
+        loader: () => fetch("/district.json"),
+      },
       {
         path: "Profile",
         Component: Profile,

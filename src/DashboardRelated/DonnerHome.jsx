@@ -9,7 +9,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
 import Swal from "sweetalert2";
 
-const MyDonnetionRequest = () => {
+const DonnerHome = () => {
   const { user } = UseAuth();
   const { register, handleSubmit, control, reset } = useForm();
   const [donnerDetails, setDonnerDetails] = useState([]);
@@ -18,13 +18,14 @@ const MyDonnetionRequest = () => {
   const viewModalRef = useRef(null);
   const UpdateModalRef = useRef(null);
   const axiosSecure = UseAxiosSecure();
-  const { data: donners = [], refetch } = useQuery({
+  const { data: donnerd = [], refetch } = useQuery({
     queryKey: ["donners", user?.email],
     queryFn: async () => {
       const result = await axiosSecure.get(`/donners?email=${user.email}`);
       return result.data;
     },
   });
+  const donners = donnerd.slice(0, 3);
 
   const [allUpazila, setAllUpazila] = useState([]);
   useEffect(() => {
@@ -124,7 +125,10 @@ const MyDonnetionRequest = () => {
   return (
     <div>
       <div>
-        <h2>Total donners {donners.length}</h2>
+        <h1 className="text-4xl font-bold text-secondary my-4">
+          Welcome - {user?.displayName}
+        </h1>
+        <h2 className="text-2xl font-medium mb-4">Recent Donation Requests</h2>
         <div>
           <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
             <table className="table">
@@ -376,13 +380,13 @@ const MyDonnetionRequest = () => {
                         {...register("recipientUpazila")}
                         className="select w-full"
                       >
-                        {getUpazilasByDistrictName(
-                          selectedDistrictName || donnerupdate.recipentDistrict
-                        ).map((upazilaName, i) => (
-                          <option key={i} value={upazilaName}>
-                            {upazilaName}
-                          </option>
-                        ))}
+                        {getUpazilasByDistrictName(selectedDistrictName).map(
+                          (upazilaName, i) => (
+                            <option key={i} value={upazilaName}>
+                              {upazilaName}
+                            </option>
+                          )
+                        )}
                       </select>
                     </fieldset>
                     <fieldset>
@@ -427,4 +431,4 @@ const MyDonnetionRequest = () => {
   );
 };
 
-export default MyDonnetionRequest;
+export default DonnerHome;
