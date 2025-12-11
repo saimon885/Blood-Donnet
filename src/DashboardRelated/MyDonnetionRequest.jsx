@@ -88,7 +88,7 @@ const MyDonnetionRequest = () => {
         Swal.fire({
           position: "top-end",
           icon: "success",
-          title: "Your work has been saved",
+          title: "Donnetion Has been Updated!",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -196,6 +196,12 @@ const MyDonnetionRequest = () => {
                     <span class="font-semibold">Requester Name :</span>
                     <span class="text-right">
                       {donnerDetails.requesterName}
+                    </span>
+                  </div>
+                  <div class="flex gap-5 items-center text-sm">
+                    <span class="font-semibold">Requester Email :</span>
+                    <span class="text-right">
+                      {donnerDetails.requesterEmail}
                     </span>
                   </div>
                   <div class="flex gap-5 items-center text-sm">

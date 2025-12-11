@@ -4,9 +4,9 @@ import { Link, Outlet } from "react-router";
 import { FaFileMedical, FaHome, FaUser, FaUsers } from "react-icons/fa";
 import { MdCreateNewFolder } from "react-icons/md";
 import { LuTally5 } from "react-icons/lu";
-import AdminRole from "../AuthProvider/AdminRole";
+import UseRole from "../AuthProvider/UseRole";
 const DashBoardLayout = () => {
-  const { role } = AdminRole();
+  const { role } = UseRole();
   console.log(role);
   return (
     <div className="drawer lg:drawer-open">
@@ -82,51 +82,72 @@ const DashBoardLayout = () => {
                 <span className="is-drawer-close:hidden">Profile</span>
               </Link>
             </li>
-            <li>
-              <Link
-                to={"/dashboard/My-donation-request"}
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="My Donetion"
-              >
-                <FaFileMedical />
-                <span className="is-drawer-close:hidden">My Donetion</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to={"/dashboard/create-donation-request"}
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="Create Donetion"
-              >
-                <MdCreateNewFolder />
-                <span className="is-drawer-close:hidden">Create Donetion</span>
-              </Link>
-            </li>
-            {role && role === "admin" && (
+            {role === "donor" && (
               <>
                 <li>
                   <Link
-                    to={"/dashboard/all-users"}
+                    to={"/dashboard/My-donation-request"}
                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="All Users"
+                    data-tip="My Donetion"
                   >
-                    <FaUsers />
-                    <span className="is-drawer-close:hidden">All Users</span>
+                    <FaFileMedical />
+                    <span className="is-drawer-close:hidden">My Donetion</span>
                   </Link>
                 </li>
                 <li>
                   <Link
-                    to={"/dashboard/all-blood-donation-request"}
+                    to={"/dashboard/create-donation-request"}
                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="All Blood Donation"
+                    data-tip="Create Donetion"
                   >
-                    <LuTally5 />
+                    <MdCreateNewFolder />
                     <span className="is-drawer-close:hidden">
-                      All Blood Donation
+                      Create Donetion
                     </span>
                   </Link>
                 </li>
               </>
+            )}
+            {role && role === "admin" && (
+              <li>
+                <Link
+                  to={"/dashboard/all-users"}
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  data-tip="All Users"
+                >
+                  <FaUsers />
+                  <span className="is-drawer-close:hidden">All Users</span>
+                </Link>
+              </li>
+            )}
+            {role === "admin" ? (
+              <li>
+                <Link
+                  to={"/dashboard/all-blood-donation-request"}
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  data-tip="All Blood Donation"
+                >
+                  <LuTally5 />
+                  <span className="is-drawer-close:hidden">
+                    All Blood Donation
+                  </span>
+                </Link>
+              </li>
+            ) : role === "volunteer" ? (
+              <li>
+                <Link
+                  to={"/dashboard/volunteerAllDonor"}
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  data-tip="All Blood Donation"
+                >
+                  <LuTally5 />
+                  <span className="is-drawer-close:hidden">
+                    All Blood Donation
+                  </span>
+                </Link>
+              </li>
+            ) : (
+              ""
             )}
 
             <li>

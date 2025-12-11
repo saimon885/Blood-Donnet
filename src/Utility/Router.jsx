@@ -3,7 +3,6 @@ import MainLayout from "../Layouts/MainLayout";
 import Home from "../Home/Home/Home";
 import Login from "../Components/Form/Login";
 import Register from "../Components/Form/Register";
-import PrivetRoute from "../AuthProvider/PrivetRoute";
 import DashBoardLayout from "../Layouts/DashBoardLayout";
 import Profile from "../DashboardRelated/Profile";
 import CreateDonor from "../DashboardRelated/CreateDonor";
@@ -11,6 +10,10 @@ import MyDonnetionRequest from "../DashboardRelated/MyDonnetionRequest";
 import DonnerHome from "../DashboardRelated/DonnerHome";
 import AllUsers from "../DashboardRelated/AllUsers";
 import Alldonor from "../DashboardRelated/Alldonor";
+import PrivetRoute from "../PrivetRouter/PrivetRoute";
+import AdminPrivetRoute from "../PrivetRouter/AdminPrivetRoute";
+import VolenteerAllDonor from "../DashboardRelated/VolenteerAllDonor";
+import VolunteerPrivetRoute from "../PrivetRouter/volunteerPrivetRoute";
 
 export const router = createBrowserRouter([
   {
@@ -53,11 +56,28 @@ export const router = createBrowserRouter([
       },
       {
         path: "all-users",
-        Component: AllUsers,
+        element: (
+          <AdminPrivetRoute>
+            <AllUsers></AllUsers>
+          </AdminPrivetRoute>
+        ),
       },
       {
         path: "all-blood-donation-request",
-        Component: Alldonor,
+        element: (
+          <AdminPrivetRoute>
+            <Alldonor></Alldonor>
+          </AdminPrivetRoute>
+        ),
+        loader: () => fetch("/district.json"),
+      },
+      {
+        path: "volunteerAllDonor",
+        element: (
+          <VolunteerPrivetRoute>
+            <VolenteerAllDonor></VolenteerAllDonor>
+          </VolunteerPrivetRoute>
+        ),
         loader: () => fetch("/district.json"),
       },
       {

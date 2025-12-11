@@ -23,8 +23,16 @@ const AllUsers = () => {
     };
     console.log(updateInfo);
     axiosSecure.patch(`/users/${user._id}`, updateInfo).then((res) => {
-      refetch();
-      console.log(res.data);
+      if (res.data.matchedCount) {
+        refetch();
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: `This role has been updated to the role being ${role}`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
     });
   };
   const roleAdmin = (user) => {
@@ -129,7 +137,6 @@ const AllUsers = () => {
                   </td>
 
                   <td className="flex items-center gap-2">
-
                     <button
                       onClick={() => roleAdmin(users)}
                       className="btn bg-green-400"

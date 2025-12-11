@@ -21,7 +21,7 @@ const Alldonor = () => {
   const { data: donners = [], refetch } = useQuery({
     queryKey: ["donners", user?.email],
     queryFn: async () => {
-      const result = await axiosSecure.get(`/donners?email=${user.email}`);
+      const result = await axiosSecure.get(`/donners/all`);
       return result.data;
     },
   });
@@ -88,7 +88,7 @@ const Alldonor = () => {
         Swal.fire({
           position: "top-end",
           icon: "success",
-          title: "Your work has been saved",
+          title: "Donnetion Has been Updated",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -139,7 +139,7 @@ const Alldonor = () => {
                   <th>Blood Group</th>
                   <th>Status</th>
                   <th>Actions</th>
-                  <th>status Actions</th>
+                  
                 </tr>
               </thead>
               <tbody>
@@ -174,7 +174,7 @@ const Alldonor = () => {
                         <ImBin2 />
                       </button>
                     </td>
-                    <td>{donner.status}</td>
+                   
                   </tr>
                 ))}
               </tbody>
@@ -198,6 +198,12 @@ const Alldonor = () => {
                     <span class="font-semibold">Requester Name :</span>
                     <span class="text-right">
                       {donnerDetails.requesterName}
+                    </span>
+                  </div>
+                  <div class="flex gap-5 items-center text-sm">
+                    <span class="font-semibold">Requester Email :</span>
+                    <span class="text-right">
+                      {donnerDetails.requesterEmail}
                     </span>
                   </div>
                   <div class="flex gap-5 items-center text-sm">
