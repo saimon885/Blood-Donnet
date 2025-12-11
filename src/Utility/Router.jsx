@@ -10,6 +10,7 @@ import CreateDonor from "../DashboardRelated/CreateDonor";
 import MyDonnetionRequest from "../DashboardRelated/MyDonnetionRequest";
 import DonnerHome from "../DashboardRelated/DonnerHome";
 import AllUsers from "../DashboardRelated/AllUsers";
+import Alldonor from "../DashboardRelated/Alldonor";
 
 export const router = createBrowserRouter([
   {
@@ -53,6 +54,11 @@ export const router = createBrowserRouter([
       {
         path: "all-users",
         Component: AllUsers,
+      },
+      {
+        path: "all-blood-donation-request",
+        Component: Alldonor,
+        loader: () => fetch("/district.json"),
       },
       {
         path: "create-donation-request",

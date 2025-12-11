@@ -3,7 +3,11 @@ import Logo from "../assets/DashboardMainLogo.png";
 import { Link, Outlet } from "react-router";
 import { FaFileMedical, FaHome, FaUser, FaUsers } from "react-icons/fa";
 import { MdCreateNewFolder } from "react-icons/md";
+import { LuTally5 } from "react-icons/lu";
+import AdminRole from "../AuthProvider/AdminRole";
 const DashBoardLayout = () => {
+  const { role } = AdminRole();
+  console.log(role);
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -98,16 +102,33 @@ const DashBoardLayout = () => {
                 <span className="is-drawer-close:hidden">Create Donetion</span>
               </Link>
             </li>
-            <li>
-              <Link
-                to={"/dashboard/all-users"}
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="All Users"
-              >
-                <FaUsers />
-                <span className="is-drawer-close:hidden">All Users</span>
-              </Link>
-            </li>
+            {role && role === "admin" && (
+              <>
+                <li>
+                  <Link
+                    to={"/dashboard/all-users"}
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="All Users"
+                  >
+                    <FaUsers />
+                    <span className="is-drawer-close:hidden">All Users</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to={"/dashboard/all-blood-donation-request"}
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="All Blood Donation"
+                  >
+                    <LuTally5 />
+                    <span className="is-drawer-close:hidden">
+                      All Blood Donation
+                    </span>
+                  </Link>
+                </li>
+              </>
+            )}
+
             <li>
               <button
                 className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
