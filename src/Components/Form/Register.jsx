@@ -136,9 +136,9 @@ const Register = () => {
                 <select
                   {...register("Blood", { required: true })}
                   className="select w-full rounded-2xl"
-                  defaultValue={""}
+                  // defaultValue={"Pick a Group"}
                 >
-                  <option disabled={true} value={""}>
+                  <option disabled={true}>
                     Pick a Group
                   </option>
 
@@ -159,8 +159,9 @@ const Register = () => {
                   <select
                     {...register("district", { required: true })}
                     className="select rounded-2xl w-full"
+                    // defaultValue={"Pick a District"}
                   >
-                    <option disabled={true} value={""}>
+                    <option disabled={true}>
                       Pick a District
                     </option>
 
@@ -177,8 +178,9 @@ const Register = () => {
                   <select
                     {...register("upazila", { required: true })} // register name 'upazila'
                     className="select rounded-2xl w-full"
+                    // defaultValue={"Pick an Upazila"}
                   >
-                    <option disabled={true} value={""}>
+                    <option disabled={true}>
                       Pick an Upazila
                     </option>
                     {getUpazilasByDistrictName(selectedDistrictName).map(

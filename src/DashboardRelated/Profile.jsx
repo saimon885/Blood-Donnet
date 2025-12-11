@@ -91,6 +91,7 @@ const Profile = () => {
         bloodGroup: data.Blood,
         district: data.district,
         upazila: data.upazila,
+        
       };
 
       // Database update

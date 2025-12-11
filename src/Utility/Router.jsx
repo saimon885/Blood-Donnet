@@ -9,6 +9,7 @@ import Profile from "../DashboardRelated/Profile";
 import CreateDonor from "../DashboardRelated/CreateDonor";
 import MyDonnetionRequest from "../DashboardRelated/MyDonnetionRequest";
 import DonnerHome from "../DashboardRelated/DonnerHome";
+import AllUsers from "../DashboardRelated/AllUsers";
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ export const router = createBrowserRouter([
         path: "Profile",
         Component: Profile,
         loader: () => fetch("/district.json"),
+      },
+      {
+        path: "all-users",
+        Component: AllUsers,
       },
       {
         path: "create-donation-request",
