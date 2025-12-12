@@ -152,7 +152,15 @@ const MyDonnetionRequest = () => {
                     <td>{donner.donetionDate}</td>
                     <td>{donner.donetionTime}</td>
                     <td>{donner.Blood}</td>
-                    <td>{donner.status}</td>
+                    <td
+                      className={`${
+                        donner.status === "completed"
+                          ? "text-green-600"
+                          : "text-red-600"
+                      } font-bold`}
+                    >
+                      {donner.status}
+                    </td>
                     <td className="flex items-center gap-2">
                       <button
                         onClick={() => handleViews(donner)}

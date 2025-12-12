@@ -35,7 +35,9 @@ const DashBoardLayout = () => {
               <path d="M14 10l2 2l-2 2"></path>
             </svg>
           </label>
-          <div className="px-4 text-primary font-bold">DashBoard</div>
+          <div className="px-4 text-[20px] text-primary font-bold uppercase">
+            {role} <span className="ml-1 text-secondary">DashBoard</span>
+          </div>
         </nav>
         {/* Page content here */}
         <div className="p-4">
@@ -49,12 +51,12 @@ const DashBoardLayout = () => {
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
+        <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-18 is-drawer-open:w-64">
           {/* Sidebar content here */}
           <ul className="menu w-full grow">
             {/* List item */}
             <Link to={"/"}>
-              <li>
+              <li className="py-2 text-[20px]">
                 <button
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                   data-tip="BloodHive"
@@ -72,7 +74,7 @@ const DashBoardLayout = () => {
             </Link>
 
             {/* List item */}
-            <li>
+            <li className="py-2 text-[20px]">
               <Link
                 to={"/dashboard/Profile"}
                 className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
@@ -84,7 +86,7 @@ const DashBoardLayout = () => {
             </li>
             {role === "donor" && (
               <>
-                <li>
+                <li className="py-2 text-[20px]">
                   <Link
                     to={"/dashboard/My-donation-request"}
                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
@@ -94,7 +96,7 @@ const DashBoardLayout = () => {
                     <span className="is-drawer-close:hidden">My Donetion</span>
                   </Link>
                 </li>
-                <li>
+                <li className="py-2 text-[20px]">
                   <Link
                     to={"/dashboard/create-donation-request"}
                     className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
@@ -109,7 +111,7 @@ const DashBoardLayout = () => {
               </>
             )}
             {role && role === "admin" && (
-              <li>
+              <li className="py-2 text-[20px]">
                 <Link
                   to={"/dashboard/all-users"}
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
@@ -121,7 +123,7 @@ const DashBoardLayout = () => {
               </li>
             )}
             {role === "admin" ? (
-              <li>
+              <li className="py-2 text-[20px]">
                 <Link
                   to={"/dashboard/all-blood-donation-request"}
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
@@ -134,7 +136,7 @@ const DashBoardLayout = () => {
                 </Link>
               </li>
             ) : role === "volunteer" ? (
-              <li>
+              <li className="py-2 text-[20px]">
                 <Link
                   to={"/dashboard/volunteerAllDonor"}
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
@@ -150,7 +152,7 @@ const DashBoardLayout = () => {
               ""
             )}
 
-            <li>
+            <li className="py-2 text-[20px]">
               <button
                 className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                 data-tip="Settings"

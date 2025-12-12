@@ -3,11 +3,12 @@ import { useForm, useWatch } from "react-hook-form";
 import UseAuth from "../AuthProvider/UseAuth";
 import { useLoaderData } from "react-router";
 import UseAxiosSecure from "../AuthProvider/UseAxiosSecure";
+import Swal from "sweetalert2";
 
 const CreateDonor = () => {
   const { user } = UseAuth();
   const axiosSecure = UseAxiosSecure();
-  const { register, handleSubmit, control } = useForm();
+  const { register, handleSubmit, control, reset } = useForm();
   const [allUpazila, setAllUpazila] = useState([]);
   useEffect(() => {
     fetch("/upazila.json")
@@ -43,7 +44,16 @@ const CreateDonor = () => {
   const handleCreateDonor = (data) => {
     console.log("Form Data:", data);
     axiosSecure.post("/donners", data).then((res) => {
-      console.log(res.data);
+      if (res.data.insertedId) {
+        reset();
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: `donnetion status has been updated and this ${status}`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
     });
   };
 

@@ -3,7 +3,9 @@ import bannerImg from "../../assets/Banner1IMG.jpeg";
 import { Link } from "react-router";
 import { useTypewriter } from "react-simple-typewriter";
 import AOS from "aos";
+import UseAuth from "../../AuthProvider/UseAuth";
 const Banner1 = () => {
+  const { user } = UseAuth();
   const [text] = useTypewriter({
     words: [" Donate Blood Today."],
     loop: {},
@@ -60,9 +62,13 @@ const Banner1 = () => {
             </div>
           </div>
           <div className="flex justify-center items-center gap-3 mx-auto">
-            <Link to={"/register"} className="btn text-[18px] rounded-2xl">
-              Donate Now
-            </Link>
+            {user ? (
+              <div className="btn text-[18px] rounded-2xl">Donate Now</div>
+            ) : (
+              <Link to={"/register"} className="btn text-[18px] rounded-2xl">
+                Donate Now
+              </Link>
+            )}
             <button className="btn text-[18px] hover:bg-white hover:text-black bg-transparent rounded-2xl text-white ">
               Find Donnor
             </button>
