@@ -14,11 +14,13 @@ import PrivetRoute from "../PrivetRouter/PrivetRoute";
 import AdminPrivetRoute from "../PrivetRouter/AdminPrivetRoute";
 import VolenteerAllDonor from "../DashboardRelated/VolenteerAllDonor";
 import VolunteerPrivetRoute from "../PrivetRouter/volunteerPrivetRoute";
+import Loading from "../Loading/Loading";
+import ErrorElement from "../Loading/ErrorElement";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    errorElement: <spna>Error 404</spna>,
+    errorElement: <ErrorElement></ErrorElement>,
     Component: MainLayout,
     children: [
       {
@@ -43,6 +45,8 @@ export const router = createBrowserRouter([
         <DashBoardLayout></DashBoardLayout>
       </PrivetRoute>
     ),
+    HydrateFallback: Loading,
+    errorElement: <ErrorElement></ErrorElement>,
     children: [
       {
         index: true,

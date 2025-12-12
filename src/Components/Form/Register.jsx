@@ -12,15 +12,18 @@ const Register = () => {
   const axiosSecure = UseAxiosSecure();
   const { CreateUser, UpdateUser } = UseAuth();
   const location = useLocation();
-  const from = location.state || "/";
+  const from = location.state?.from || "/";
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     control,
+    getValues,
     formState: { errors },
   } = useForm();
+
   const [allUpazila, setAllUpazila] = useState([]);
+
   useEffect(() => {
     fetch("/upazila.json")
       .then((res) => res.json())
@@ -28,10 +31,12 @@ const Register = () => {
         setAllUpazila(data);
       });
   }, []);
+
   const DistrictData = useLoaderData();
-  const DistrictDuplicate = DistrictData.map((c) => c.name);
+  const DistrictDuplicate = DistrictData ? DistrictData.map((c) => c.name) : [];
 
   const selectedDistrictName = useWatch({ control, name: "district" });
+
   const getDistrictIdByName = (districtName) => {
     const districtObject = DistrictData.find((d) => d.name === districtName);
     return districtObject ? String(districtObject.id) : null;
@@ -56,8 +61,7 @@ const Register = () => {
 
       // Create user
       await CreateUser(data.email, data.password);
-
-      // Upload Image
+      // Upload Image (ImgBB)
       const formData = new FormData();
       formData.append("image", ProfileImg);
 
@@ -68,7 +72,7 @@ const Register = () => {
       const imgRes = await axios.post(Image_Api_Url, formData);
       const imageUrl = imgRes.data.data.url;
 
-      // Save to Database
+      // Save user info to Database
       const userInfo = {
         displayName: data.name,
         photoURL: imageUrl,
@@ -76,31 +80,33 @@ const Register = () => {
         bloodGroup: data.Blood,
         district: data.district,
         upazila: data.upazila,
+        role: "donor",
       };
 
       const dbRes = await axiosSecure.post("/users", userInfo);
 
-      if (!dbRes.data.insertedId) {
-        throw new Error("Database insert failed");
+      if (dbRes.data.insertedId) {
+        // Update Profile
+        await UpdateUser({
+          displayName: data.name,
+          photoURL: imageUrl,
+        });
+
+        toast.success("Registration successful ✅");
+        navigate(from, { replace: true });
+      } else {
+        throw new Error("Database insertion failed or user already exists.");
       }
-
-      // Update Firebase Profile
-      await UpdateUser({
-        displayName: data.name,
-        photoURL: imageUrl,
-      });
-
-      toast.success("Register successful ✅");
-
-      navigate(from);
     } catch (error) {
-      toast.error(error.message || "Something went wrong");
+      console.error("Registration Error:", error);
+      toast.error(error.message || "Registration failed. Please try again.");
     }
   };
 
   const handleShowOf = () => {
     setShow(!show);
   };
+
   return (
     <div className="hero my-15 px-5">
       <div className="card bg-base-100 border border-primary w-full max-w-xl shrink-0 shadow-2xl">
@@ -110,6 +116,7 @@ const Register = () => {
           </h1>
           <form onSubmit={handleSubmit(handleRegister)}>
             <fieldset className="fieldset">
+              {/* Name Field */}
               <label className="label font-medium">Name</label>
               <input
                 type="text"
@@ -118,30 +125,31 @@ const Register = () => {
                 placeholder="Enter your Name"
               />
               {errors.name?.type === "required" && (
-                <p className="text-red-500">Required Error</p>
+                <p className="text-red-500">Name is required</p>
               )}
 
+              {/* Photo Field */}
               <label className="label font-medium">Photo</label>
-
               <input
                 type="file"
                 {...register("photo", { required: true })}
                 className="file-input rounded-2xl focus:border-0 w-full focus:outline-gray-200"
               />
               {errors.photo?.type === "required" && (
-                <p className="text-red-500">Required Error</p>
+                <p className="text-red-500">Profile photo is required</p>
               )}
+
+              {/* Blood Group Field */}
               <fieldset className="fieldset">
                 <legend className="fieldset-legend">Blood Group</legend>
                 <select
                   {...register("Blood", { required: true })}
                   className="select w-full rounded-2xl"
-                  // defaultValue={"Pick a Group"}
+                  defaultValue={""}
                 >
-                  <option disabled={true}>
+                  <option value={""} disabled={true}>
                     Pick a Group
                   </option>
-
                   <option>A+</option>
                   <option>A-</option>
                   <option>B+</option>
@@ -151,7 +159,12 @@ const Register = () => {
                   <option>AB+</option>
                   <option>AB-</option>
                 </select>
+                {errors.Blood?.type === "required" && (
+                  <p className="text-red-500">Blood Group is required</p>
+                )}
               </fieldset>
+
+              {/* District and Upazila Fields */}
               <div className="flex gap-4 items-center w-full">
                 <fieldset className="fieldset w-full">
                   <legend className="fieldset-legend">District</legend>
@@ -159,9 +172,9 @@ const Register = () => {
                   <select
                     {...register("district", { required: true })}
                     className="select rounded-2xl w-full"
-                    // defaultValue={"Pick a District"}
+                    defaultValue={""}
                   >
-                    <option disabled={true}>
+                    <option value={""} disabled={true}>
                       Pick a District
                     </option>
 
@@ -171,16 +184,19 @@ const Register = () => {
                       </option>
                     ))}
                   </select>
+                  {errors.district?.type === "required" && (
+                    <p className="text-red-500">District is required</p>
+                  )}
                 </fieldset>
 
                 <fieldset className="fieldset w-full">
                   <legend className="fieldset-legend">Upazila</legend>
                   <select
-                    {...register("upazila", { required: true })} // register name 'upazila'
+                    {...register("upazila", { required: true })}
                     className="select rounded-2xl w-full"
-                    // defaultValue={"Pick an Upazila"}
+                    defaultValue={""}
                   >
-                    <option disabled={true}>
+                    <option value={""} disabled={true}>
                       Pick an Upazila
                     </option>
                     {getUpazilasByDistrictName(selectedDistrictName).map(
@@ -191,8 +207,13 @@ const Register = () => {
                       )
                     )}
                   </select>
+                  {errors.upazila?.type === "required" && (
+                    <p className="text-red-500">Upazila is required</p>
+                  )}
                 </fieldset>
               </div>
+
+              {/* Email Field */}
               <label className="label font-medium">Email</label>
               <input
                 type="email"
@@ -201,37 +222,63 @@ const Register = () => {
                 placeholder="Enter your email"
               />
               {errors.email?.type === "required" && (
-                <p className="text-red-500">Required Error</p>
+                <p className="text-red-500">Email is required</p>
               )}
+
+              {/* Password Field */}
               <label className="label font-medium">Password</label>
               <div className="relative">
                 <input
                   type={!show ? "text" : "password"}
                   {...register("password", {
-                    required: true,
-                    // pattern: /^[A-Za-z]+$/i,
-                    minLength: 6,
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters long",
+                    },
                   })}
                   className="input rounded-2xl focus:border-0 w-full focus:outline-gray-200"
                   placeholder="Enter your password"
                 />
-                <span onClick={handleShowOf} className="absolute top-3 right-5">
-                  {" "}
+                <span
+                  onClick={handleShowOf}
+                  className="absolute top-3 right-5 cursor-pointer"
+                >
                   {show ? <FaEye size={18} /> : <FaEyeSlash size={18} />}
                 </span>
-                {errors.password?.type === "required" && (
-                  <p className="text-red-500">Requierd Error!</p>
+                {errors.password && (
+                  <p className="text-red-500">{errors.password.message}</p>
                 )}
-                {errors.password?.type === "minLength" && (
+              </div>
+
+              {/* Confirm Password */}
+              <label className="label font-medium">Confirm Password</label>
+              <div className="relative">
+                <input
+                  type={!show ? "text" : "password"}
+                  {...register("confirmPassword", {
+                    required: "Confirm Password is required",
+                    validate: (value) =>
+                      value === getValues("password") ||
+                      "The passwords do not match",
+                  })}
+                  className="input rounded-2xl focus:border-0 w-full focus:outline-gray-200"
+                  placeholder="Confirm your password"
+                />
+                <span
+                  onClick={handleShowOf}
+                  className="absolute top-3 right-5 cursor-pointer"
+                >
+                  {show ? <FaEye size={18} /> : <FaEyeSlash size={18} />}
+                </span>
+                {errors.confirmPassword && (
                   <p className="text-red-500">
-                    Please must be 6 charecter or longer!
+                    {errors.confirmPassword.message}
                   </p>
                 )}
               </div>
-              {/* {error && <p className="text-red-500 font-medium">{error}</p>} */}
-              <div></div>
               <input
-                className="btn rounded-2xl btn-secondary mt-4"
+                className="btn rounded-2xl btn-secondary mt-4 w-full"
                 type="submit"
                 value="Register"
               />
