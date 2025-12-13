@@ -4,6 +4,8 @@ import { useParams } from "react-router";
 import UseAxiosSecure from "../AuthProvider/UseAxiosSecure";
 import ErrorElement from "../Loading/ErrorElement";
 import UseAuth from "../AuthProvider/UseAuth";
+import Swal from "sweetalert2";
+import Loading from "../Loading/Loading";
 
 const BloodDonnetionDetailsPage = () => {
   const { id } = useParams();
@@ -15,6 +17,7 @@ const BloodDonnetionDetailsPage = () => {
     data: donnersDetails = {},
     isLoading,
     isError,
+    refetch,
   } = useQuery({
     queryKey: ["donners", id],
     queryFn: async () => {
@@ -23,21 +26,13 @@ const BloodDonnetionDetailsPage = () => {
     },
     enabled: !!id,
   });
-  const { data: users = [] } = useQuery({
-    queryKey: ["/users", user?.email],
-    queryFn: async () => {
-      const res = await axiosSecure.get(`/users?email=${user.email}`);
-      return res.data;
-    },
-  });
-  console.log(users);
 
   const handleDonation = () => {
     modalRef.current.showModal();
   };
 
   if (isLoading) {
-    return <div className="text-center py-10">Loading details...</div>;
+    return <Loading></Loading>;
   }
 
   if (isError || !donnersDetails._id) {
@@ -47,6 +42,25 @@ const BloodDonnetionDetailsPage = () => {
       </div>
     );
   }
+  const handleConfirmDonation = (donor) => {
+    console.log(donor);
+    const updateInfo = {
+      status: "in-progress",
+    };
+    axiosSecure.patch(`/donners/${donor._id}`, updateInfo).then((res) => {
+      if (res.data.modifiedCount) {
+        refetch();
+        modalRef.current.close();
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: `donnetion Confirm`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    });
+  };
 
   return (
     <div className="max-w-md p-3 mx-auto">
@@ -125,37 +139,36 @@ const BloodDonnetionDetailsPage = () => {
           <h3 className="font-bold text-lg">Confirm Donation Details</h3>
           <div className="py-4">
             <div>
-              {users.map((user) => (
-                <div>
-                  <div className="">
-                    <span className="font-semibold">Name :</span>
-                    <input
-                      type="text"
-                      defaultValue={user.displayName}
-                      readOnly
-                      className="input w-full"
-                    />
-                  </div>
-                  <div className="">
-                    <span className="font-semibold">Email :</span>
-                    <input
-                      type="text"
-                      defaultValue={user.email}
-                      readOnly
-                      className="input w-full"
-                    />
-                  </div>
-                </div>
-              ))}
+              <div className="">
+                <span className="font-semibold">Name :</span>
+                <input
+                  type="text"
+                  defaultValue={user.displayName}
+                  readOnly
+                  className="input w-full"
+                />
+              </div>
+              <div className="">
+                <span className="font-semibold">Email :</span>
+                <input
+                  type="text"
+                  defaultValue={user.email}
+                  readOnly
+                  className="input w-full"
+                />
+              </div>
             </div>
           </div>
           <div className="modal-action">
+            <button
+              onClick={() => handleConfirmDonation(donnersDetails)}
+              className="btn btn-secondary text-white"
+            >
+              Confirm Donation
+            </button>
             <form method="dialog">
               <button className="btn">Close</button>
             </form>
-            <button className="btn btn-success text-white">
-              Confirm Donation
-            </button>
           </div>
         </div>
       </dialog>

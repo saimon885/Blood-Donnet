@@ -26,7 +26,6 @@ const VolenteerAllDonor = () => {
   };
 
   const updateStatus = (donor, status) => {
-    console.log(donor, status);
     const updateInfo = {
       status: status,
     };

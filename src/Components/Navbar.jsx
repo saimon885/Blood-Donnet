@@ -32,6 +32,12 @@ const Navbar = () => {
       >
         Blood-Donation-Requests
       </NavLink>
+      <NavLink
+        to={"/search-blood-requests"}
+        className="hover:bg-amber-500 p-1 pl-2 rounded"
+      >
+        Search Blood
+      </NavLink>
     </div>
   );
   const handleLogOut = () => {

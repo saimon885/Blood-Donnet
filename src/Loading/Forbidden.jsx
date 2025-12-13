@@ -37,7 +37,7 @@ const Forbidden = () => {
                                    shadow-md hover:bg-red-700 transition duration-300 
                                    focus:outline-none focus:ring-4 focus:ring-red-300"
           >
-            <FaExclamationTriangle className="inline mr-2" />
+            ⬅
             Back to Home
           </button>
         </div>

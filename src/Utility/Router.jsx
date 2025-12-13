@@ -18,6 +18,7 @@ import Loading from "../Loading/Loading";
 import ErrorElement from "../Loading/ErrorElement";
 import AllBloodDonnetRequest from "../DashboardRelated/AllBloodDonnetRequest";
 import BloodDonnetionDetailsPage from "../DashboardRelated/BloodDonnetionDetailsPage";
+import BloodRequest from "../DashboardRelated/BloodRequest";
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,11 @@ export const router = createBrowserRouter([
       {
         path: "register",
         Component: Register,
+        loader: () => fetch("/district.json"),
+      },
+      {
+        path: "search-blood-requests",
+        Component: BloodRequest,
         loader: () => fetch("/district.json"),
       },
       {

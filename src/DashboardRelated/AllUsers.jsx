@@ -11,10 +11,11 @@ const AllUsers = () => {
   const { data: allUsers = [], refetch } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const result = await axiosSecure.get("/users");
+      const result = await axiosSecure.get("/users/alladminusers");
       return result.data;
     },
   });
+  console.log(allUsers);
   const userUpdateRole = (user, role) => {
     console.log(user);
     const updateInfo = {
