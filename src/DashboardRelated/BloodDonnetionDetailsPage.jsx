@@ -1,28 +1,60 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useRef } from "react";
 import { useParams } from "react-router";
 import UseAxiosSecure from "../AuthProvider/UseAxiosSecure";
+import ErrorElement from "../Loading/ErrorElement";
+import UseAuth from "../AuthProvider/UseAuth";
 
 const BloodDonnetionDetailsPage = () => {
   const { id } = useParams();
+  const { user } = UseAuth();
   const axiosSecure = UseAxiosSecure();
-  console.log(id);
-  const { data: donnersDetails = [] } = useQuery({
+  const modalRef = useRef(null);
+
+  const {
+    data: donnersDetails = {},
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["donners", id],
     queryFn: async () => {
       const result = await axiosSecure.get(`/donners/${id}`);
       return result.data;
     },
+    enabled: !!id,
   });
-  console.log(donnersDetails);
+  const { data: users = [] } = useQuery({
+    queryKey: ["/users", user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/users?email=${user.email}`);
+      return res.data;
+    },
+  });
+  console.log(users);
+
+  const handleDonation = () => {
+    modalRef.current.showModal();
+  };
+
+  if (isLoading) {
+    return <div className="text-center py-10">Loading details...</div>;
+  }
+
+  if (isError || !donnersDetails._id) {
+    return (
+      <div>
+        <ErrorElement></ErrorElement>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-md p-3 mx-auto">
-      <h3 className="font-bold text-lg">Donnetion Details</h3>
       <div className="py-4 ">
         <div>
           <div className="rounded-2xl border border-base-content/5 bg-base-100 shadow-xl">
-            <div className="bg-secondary text-white p-3">
-              <h2 className="text-lg font-bold">Donner All Information</h2>
+            <div className="bg-primary text-white p-3">
+              <h2 className="text-lg font-bold">Donner Details</h2>
             </div>
             <div className="p-4 space-y-2">
               <div className="flex justify-between items-center text-sm">
@@ -76,10 +108,57 @@ const BloodDonnetionDetailsPage = () => {
                   {donnersDetails.requestMessage}
                 </span>
               </div>
+              <button
+                onClick={() => handleDonation()}
+                className="btn btn-secondary"
+              >
+                Donation
+              </button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Open the modal using document.getElementById('ID').showModal() method */}
+      <dialog ref={modalRef} className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Confirm Donation Details</h3>
+          <div className="py-4">
+            <div>
+              {users.map((user) => (
+                <div>
+                  <div className="">
+                    <span className="font-semibold">Name :</span>
+                    <input
+                      type="text"
+                      defaultValue={user.displayName}
+                      readOnly
+                      className="input w-full"
+                    />
+                  </div>
+                  <div className="">
+                    <span className="font-semibold">Email :</span>
+                    <input
+                      type="text"
+                      defaultValue={user.email}
+                      readOnly
+                      className="input w-full"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="modal-action">
+            <form method="dialog">
+              <button className="btn">Close</button>
+            </form>
+            <button className="btn btn-success text-white">
+              Confirm Donation
+            </button>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };
