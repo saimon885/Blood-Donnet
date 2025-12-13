@@ -164,19 +164,22 @@ const Alldonor = () => {
                     <td className="flex items-center gap-2">
                       <button
                         onClick={() => handleViews(donner)}
-                        className="btn btn-small"
+                        className="btn btn-sm btn-info text-white"
+                        title="View Details"
                       >
                         <FaRegEye />
                       </button>
                       <button
                         onClick={() => handleEditDonnetion(donner)}
-                        className="btn btn-small"
+                        className="btn btn-sm btn-warning text-white"
+                        title="Edit Request"
                       >
                         <MdModeEdit />
                       </button>
                       <button
                         onClick={() => handleDelete(donner._id)}
-                        className="btn btn-small"
+                        className="btn btn-sm btn-error text-white"
+                        title="Delete Request"
                       >
                         <ImBin2 />
                       </button>

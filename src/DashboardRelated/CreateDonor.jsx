@@ -49,7 +49,7 @@ const CreateDonor = () => {
         Swal.fire({
           position: "top-end",
           icon: "success",
-          title: `donnetion status has been updated and this ${status}`,
+          title: `donnetion Request has been Created.`,
           showConfirmButton: false,
           timer: 1500,
         });

@@ -16,6 +16,8 @@ import VolenteerAllDonor from "../DashboardRelated/VolenteerAllDonor";
 import VolunteerPrivetRoute from "../PrivetRouter/volunteerPrivetRoute";
 import Loading from "../Loading/Loading";
 import ErrorElement from "../Loading/ErrorElement";
+import AllBloodDonnetRequest from "../DashboardRelated/AllBloodDonnetRequest";
+import BloodDonnetionDetailsPage from "../DashboardRelated/BloodDonnetionDetailsPage";
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +37,19 @@ export const router = createBrowserRouter([
         path: "register",
         Component: Register,
         loader: () => fetch("/district.json"),
+      },
+      {
+        path: "blood-donation-requests",
+        Component: AllBloodDonnetRequest,
+        loader: () => fetch("/district.json"),
+      },
+      {
+        path: "blood-donation-Details/:id",
+        element: (
+          <PrivetRoute>
+            <BloodDonnetionDetailsPage></BloodDonnetionDetailsPage>
+          </PrivetRoute>
+        ),
       },
     ],
   },

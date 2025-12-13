@@ -26,7 +26,12 @@ const Navbar = () => {
       >
         DashBoard
       </NavLink>
-      <a className="hover:bg-amber-500 p-1 pl-2 rounded">About</a>
+      <NavLink
+        to={"/blood-donation-requests"}
+        className="hover:bg-amber-500 p-1 pl-2 rounded"
+      >
+        Blood-Donation-Requests
+      </NavLink>
     </div>
   );
   const handleLogOut = () => {

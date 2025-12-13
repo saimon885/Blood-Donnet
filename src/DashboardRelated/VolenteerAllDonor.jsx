@@ -93,7 +93,8 @@ const VolenteerAllDonor = () => {
                     <td>
                       <button
                         onClick={() => handleViews(donner)}
-                        className="btn btn-small"
+                        className="btn btn-sm btn-info text-white"
+                        title="View Details"
                       >
                         <FaRegEye />
                       </button>
@@ -101,13 +102,15 @@ const VolenteerAllDonor = () => {
                     <td className="flex items-center gap-2">
                       <button
                         onClick={() => handleConfirm(donner)}
-                        className=" btn"
+                        className="btn btn-sm btn-warning text-white"
+                        title="Edit Request"
                       >
                         <GiConfirmed />
                       </button>
                       <button
                         onClick={() => handleCancel(donner)}
-                        className=" btn"
+                        className="btn btn-sm btn-error text-white"
+                        title="Delete Request"
                       >
                         <ImCancelCircle />
                       </button>
