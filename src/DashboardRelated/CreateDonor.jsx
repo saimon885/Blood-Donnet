@@ -16,7 +16,7 @@ const CreateDonor = () => {
       .then((data) => {
         setAllUpazila(data);
       })
-      .catch((err) => console.error("Error loading upazila data:", err));
+      
   }, []);
 
   const DistrictData = useLoaderData();
@@ -42,7 +42,7 @@ const CreateDonor = () => {
   };
 
   const handleCreateDonor = (data) => {
-    console.log("Form Data:", data);
+
     axiosSecure.post("/donners", data).then((res) => {
       if (res.data.insertedId) {
         reset();

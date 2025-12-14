@@ -1,6 +1,8 @@
 import Aos from "aos";
 import "aos/dist/aos.css";
 import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const ContuctUs = () => {
   useEffect(() => {
@@ -9,8 +11,13 @@ const ContuctUs = () => {
       once: true,
     });
   }, []);
+  const { register, handleSubmit, reset } = useForm();
+  const submitContuctForm = () => {
+    toast.success("Submit Successfull ✅");
+    reset();
+  };
   return (
-    <div data-aos="fade-up">
+    <div className="mx-5" data-aos="fade-up">
       <h2 className="text-4xl text-center font-bold text-primary">
         Contact Us
       </h2>
@@ -19,17 +26,19 @@ const ContuctUs = () => {
           <div className="card-body">
             <h1 className="text-3xl font-bold">Contact</h1>
 
-            <form>
+            <form onSubmit={handleSubmit(submitContuctForm)}>
               <fieldset className="fieldset">
                 <label className="label font-medium">Your Email</label>
                 <input
                   type="email"
+                  {...register("email", { required: true })}
                   className="input rounded-2xl focus:border-0 w-full focus:outline-gray-200"
                   placeholder="Enter your email"
                 />
                 <label className="label font-medium">Your Phone Number</label>
                 <input
                   type="number"
+                  {...register("number", { required: true })}
                   className="input rounded-2xl focus:border-0 w-full focus:outline-gray-200"
                   placeholder="Enter your Number"
                 />
@@ -37,7 +46,7 @@ const ContuctUs = () => {
                 <label className="label font-medium"> Your Messege</label>
                 <textarea
                   className="input h-35 rounded-2xl focus:border-0 w-full focus:outline-gray-200"
-                  name=""
+                  {...register("messege", { required: true })}
                   placeholder="Enter Your Messege"
                   cols="30"
                   rows="10"

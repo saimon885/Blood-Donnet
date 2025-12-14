@@ -34,7 +34,6 @@ const BloodDonnetionDetailsPage = () => {
   }
 
   const handleConfirmDonation = (donor) => {
-    console.log(donor);
     const updateInfo = {
       status: "in-progress",
     };
@@ -139,7 +138,7 @@ const BloodDonnetionDetailsPage = () => {
                   className="input w-full"
                 />
               </div>
-              <div className="">
+              <div className="my-2">
                 <span className="font-semibold">Email :</span>
                 <input
                   type="text"
@@ -151,12 +150,16 @@ const BloodDonnetionDetailsPage = () => {
             </div>
           </div>
           <div className="modal-action">
-            <button
-              onClick={() => handleConfirmDonation(donnersDetails)}
-              className="btn btn-secondary text-white"
-            >
-              Confirm Donation
-            </button>
+            {user?.email === donnersDetails.requesterEmail ? (
+              ""
+            ) : (
+              <button
+                onClick={() => handleConfirmDonation(donnersDetails)}
+                className="btn btn-secondary text-white"
+              >
+                Confirm Donation
+              </button>
+            )}
             <form method="dialog">
               <button className="btn">Close</button>
             </form>

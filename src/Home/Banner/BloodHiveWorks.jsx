@@ -16,7 +16,7 @@ const BloodHiveWorks = () => {
     });
   }, []);
   return (
-    <div data-aos="fade-up" className="my-8">
+    <div data-aos="fade-up" className="my-8 mx-5">
       <h1 className="text-4xl font-bold text-primary text-center">
         How {text}
       </h1>

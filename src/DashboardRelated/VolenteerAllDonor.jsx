@@ -57,7 +57,6 @@ const VolenteerAllDonor = () => {
   return (
     <div>
       <div>
-        <h2>Total donners {donners.length}</h2>
         <div>
           <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
             <table className="table">

@@ -22,6 +22,7 @@ import BloodRequest from "../DashboardRelated/BloodRequest";
 import Funding from "../Pages/Funding";
 import PaymentSuccess from "../Pages/PaymentSuccess";
 import PaymentCancel from "../Pages/PaymentCancel";
+import DonorPrivetRoute from "../PrivetRouter/DonorPrivetRoute";
 
 export const router = createBrowserRouter([
   {
@@ -47,7 +48,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "funding",
-        element: <Funding></Funding>,
+        element: (
+          <PrivetRoute>
+            <Funding></Funding>
+          </PrivetRoute>
+        ),
       },
       {
         path: "register",
@@ -122,12 +127,20 @@ export const router = createBrowserRouter([
       },
       {
         path: "create-donation-request",
-        Component: CreateDonor,
+        element: (
+          <DonorPrivetRoute>
+            <CreateDonor></CreateDonor>
+          </DonorPrivetRoute>
+        ),
         loader: () => fetch("/district.json"),
       },
       {
         path: "My-donation-request",
-        Component: MyDonnetionRequest,
+        element: (
+          <DonorPrivetRoute>
+            <MyDonnetionRequest></MyDonnetionRequest>
+          </DonorPrivetRoute>
+        ),
         loader: () => fetch("/district.json"),
       },
     ],

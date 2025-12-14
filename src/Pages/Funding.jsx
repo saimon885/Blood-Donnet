@@ -2,6 +2,8 @@ import React from "react";
 import UseAuth from "../AuthProvider/UseAuth";
 import UseAxiosSecure from "../AuthProvider/UseAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
+import { FaSackDollar } from "react-icons/fa6";
+import { AiFillDollarCircle } from "react-icons/ai";
 
 const Funding = () => {
   const { user } = UseAuth();
@@ -13,7 +15,6 @@ const Funding = () => {
       return result.data;
     },
   });
-  console.log(data);
   const fundAmount = 50;
   const handleGiveFundClick = async () => {
     const paymentInfo = {
@@ -26,14 +27,14 @@ const Funding = () => {
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-xl">
+    <div className="p-6 bg-white rounded-lg">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold text-gray-900">Funding</h1>
         <button
           onClick={handleGiveFundClick}
-          className="px-4 py-2 text-white bg-secondary rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer focus:ring-opacity-50 transition duration-150 ease-in-out"
+          className="px-4 py-2 flex items-center gap-2 text-white bg-secondary rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer focus:ring-opacity-50 transition duration-150 ease-in-out"
         >
-          Give Fund
+          <span>Give Fund</span> <AiFillDollarCircle />
         </button>
       </div>
 
@@ -50,7 +51,7 @@ const Funding = () => {
           </thead>
           <tbody>
             {data?.map((item, index) => (
-              <tr>
+              <tr key={item._id}>
                 <th>{index + 1}</th>
                 <td>{item.funderName}</td>
                 <td>$ {item.amount}</td>

@@ -98,7 +98,6 @@ const Register = () => {
         throw new Error("Database insertion failed or user already exists.");
       }
     } catch (error) {
-      console.error("Registration Error:", error);
       toast.error(error.message || "Registration failed. Please try again.");
     }
   };

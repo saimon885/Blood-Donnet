@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 const PaymentCancel = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
       <div className="w-full max-w-sm md:max-w-md bg-white rounded-xl shadow-2xl p-6 sm:p-8 text-center border-t-8 border-red-500">
         <div className="flex justify-center mb-6">
           <div className="w-16 h-16 sm:w-20 sm:h-20 bg-red-100 rounded-full flex items-center justify-center">

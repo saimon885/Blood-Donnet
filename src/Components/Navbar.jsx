@@ -18,28 +18,28 @@ const Navbar = () => {
 
   const Links = (
     <div className=" flex md:flex-row flex-col gap-2 md:gap-4">
-      <NavLink className={"hover:bg-amber-500 p-1 pl-2 rounded"} to={"/"}>
+      <NavLink className={"hover:bg-red-500 p-1 pl-2 rounded"} to={"/"}>
         Home
       </NavLink>
       <NavLink
-        className={"hover:bg-amber-500 p-1 pl-2 rounded"}
-        to={"/dashboard"}
-      >
-        DashBoard
-      </NavLink>
-      <NavLink
         to={"/blood-donation-requests"}
-        className="hover:bg-amber-500 p-1 pl-2 rounded"
+        className="hover:bg-red-500 p-1 pl-2 rounded"
       >
         Blood-Donation-Requests
       </NavLink>
       <NavLink
         to={"/search-blood-requests"}
-        className="hover:bg-amber-500 p-1 pl-2 rounded"
+        className="hover:bg-red-500 p-1 pl-2 rounded"
       >
         Search Blood
       </NavLink>
-      <NavLink to={"/funding"} className="hover:bg-amber-500 p-1 pl-2 rounded">
+      <NavLink
+        className={"hover:bg-red-500 p-1 pl-2 rounded"}
+        to={"/dashboard"}
+      >
+        DashBoard
+      </NavLink>
+      <NavLink to={"/funding"} className="hover:bg-red-500 p-1 pl-2 rounded">
         Funding
       </NavLink>
     </div>

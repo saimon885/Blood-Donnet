@@ -16,14 +16,11 @@ const AllUsers = () => {
       return result.data;
     },
   });
-  console.log(allUsers);
   const userUpdateRole = (user, role) => {
-    console.log(user);
     const updateInfo = {
       role: role,
       email: user.email,
     };
-    console.log(updateInfo);
     axiosSecure.patch(`/users/${user._id}`, updateInfo).then((res) => {
       if (res.data.matchedCount) {
         refetch();
@@ -47,7 +44,6 @@ const AllUsers = () => {
     userUpdateRole(user, "donor");
   };
   const updateStatus = (user, status) => {
-    console.log(user);
     const updateInfo = {
       status: status,
       email: user.email,
@@ -84,7 +80,6 @@ const AllUsers = () => {
     if (isLoading) return <Loading></Loading>;
   return (
     <div>
-      <h2>Users {allUsers.length}</h2>
       <div>
         <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
           <table className="table">

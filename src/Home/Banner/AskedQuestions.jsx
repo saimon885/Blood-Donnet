@@ -2,7 +2,7 @@ import React from "react";
 
 const AskedQuestions = () => {
   return (
-    <div className="md:mx-70 my-8">
+    <div className="mx-5 md:mx-auto md:max-w-2xl my-8">
         <h1 className="text-4xl font-bold text-primary text-center my-5">Frequently Asked Questions</h1>
       <div
         tabIndex={0}

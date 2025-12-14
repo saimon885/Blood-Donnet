@@ -4,16 +4,16 @@ import UseRole from "../AuthProvider/UseRole";
 import Loading from "../Loading/Loading";
 import Forbidden from "../Loading/Forbidden";
 
-const AdminPrivetRoute = ({ children }) => {
+const DonorPrivetRoute = ({ children }) => {
   const { loading } = UseAuth();
   const { role, isLoading } = UseRole();
   if (loading || isLoading) {
     return <Loading></Loading>;
   }
-  if (role !== "admin") {
+  if (role !== "donor") {
     return <Forbidden></Forbidden>;
   }
   return children;
 };
 
-export default AdminPrivetRoute;
+export default DonorPrivetRoute;

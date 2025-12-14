@@ -17,7 +17,6 @@ const DonnerHome = () => {
   const { register, handleSubmit, control, reset } = useForm();
   const [donnerDetails, setDonnerDetails] = useState([]);
   const [donnerupdate, setDonnerUpdate] = useState([]);
-  console.log(donnerupdate);
   const viewModalRef = useRef(null);
   const UpdateModalRef = useRef(null);
   const axiosSecure = UseAxiosSecure();
@@ -104,7 +103,6 @@ const DonnerHome = () => {
     });
   };
   const handleDelete = (id) => {
-    console.log(id);
     Swal.fire({
       title: "Are you sure you want to delete?",
       text: "You won't be able to revert this!",
@@ -133,7 +131,7 @@ const DonnerHome = () => {
     <div>
       <div>
         <h1 className="text-4xl font-bold text-secondary my-4">
-          Welcome - {user?.displayName}
+          Welcome - {user?.displayName}💐🌼
         </h1>
         {role === "donor" && (
           <>
@@ -218,60 +216,68 @@ const DonnerHome = () => {
                 <h3 className="font-bold text-lg">Donnetion Details</h3>
                 <div className="py-4">
                   <div>
-                    <div class=" rounded-box border border-base-content/5 bg-base-100 shadow-xl">
-                      <div class="bg-secondary text-white p-3">
-                        <h2 class="text-lg font-bold">
+                    <div className=" rounded-box border border-base-content/5 bg-base-100 shadow-xl">
+                      <div className="bg-secondary text-white p-3">
+                        <h2 className="text-lg font-bold">
                           Donner All Information
                         </h2>
                       </div>
-                      <div class="p-4 space-y-2">
-                        <div class="flex gap-5 items-center text-sm">
-                          <span class="font-semibold">Requester Name :</span>
-                          <span class="text-right">
+                      <div className="p-4 space-y-2">
+                        <div className="flex gap-5 items-center text-sm">
+                          <span className="font-semibold">
+                            Requester Name :
+                          </span>
+                          <span className="text-right">
                             {donnerDetails.requesterName}
                           </span>
                         </div>
-                        <div class="flex gap-5 items-center text-sm">
-                          <span class="font-semibold">Recipient Name :</span>
-                          <span class="text-right">
+                        <div className="flex gap-5 items-center text-sm">
+                          <span className="font-semibold">
+                            Recipient Name :
+                          </span>
+                          <span className="text-right">
                             {donnerDetails.recipientName}
                           </span>
                         </div>
-                        <div class="flex gap-5 items-center text-sm">
-                          <span class="font-semibold">Location :</span>
-                          <span class="text-right">
+                        <div className="flex gap-5 items-center text-sm">
+                          <span className="font-semibold">Location :</span>
+                          <span className="text-right">
                             {donnerDetails.recipentDistrict},
                             {donnerDetails.recipientUpazila}
                           </span>
                         </div>
-                        <div class="flex gap-5 items-center text-sm">
-                          <span class="font-semibold">Blood Group :</span>
-                          <span class="text-right">{donnerDetails.Blood}</span>
+                        <div className="flex gap-5 items-center text-sm">
+                          <span className="font-semibold">Blood Group :</span>
+                          <span className="text-right">
+                            {donnerDetails.Blood}
+                          </span>
                         </div>
-                        <div class="flex gap-5 items-center text-sm">
-                          <span class="font-semibold">HospitalName :</span>
-                          <span class="text-right">
+                        <div className="flex gap-5 items-center text-sm">
+                          <span className="font-semibold">HospitalName :</span>
+                          <span className="text-right">
                             {donnerDetails.hospitalName}
                           </span>
                         </div>
-                        <div class="flex gap-5 items-center text-sm">
-                          <span class="font-semibold">Address :</span>
-                          <span class="text-right">
+                        <div className="flex gap-5 items-center text-sm">
+                          <span className="font-semibold">Address :</span>
+                          <span className="text-right">
                             {donnerDetails.address}
                           </span>
                         </div>
-                        <div class="flex gap-5 items-center text-sm">
-                          <span class="font-semibold">
+                        <div className="flex gap-5 items-center text-sm">
+                          <span className="font-semibold">
                             Donnetion Time And Date{" "}
                           </span>
-                          <span class="text-right">
+                          <span className="text-right">
                             {donnerDetails.donetionDate} /{" "}
                             {donnerDetails.donetionTime}
                           </span>
                         </div>
-                        <div class="flex gap-5 items-center text-sm">
-                          <span class="font-semibold">Request Message :</span>
-                          <span class="text-right">
+                        <div className="flex gap-5 items-center text-sm">
+                          <span className="font-semibold">
+                            Request Message :
+                          </span>
+                          <span className="text-right">
                             {donnerDetails.requestMessage}
                           </span>
                         </div>
