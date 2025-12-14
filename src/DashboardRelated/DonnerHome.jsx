@@ -9,6 +9,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
 import Swal from "sweetalert2";
 import UseRole from "../AuthProvider/UseRole";
+import Loading from "../Loading/Loading";
 
 const DonnerHome = () => {
   const { user } = UseAuth();
@@ -20,7 +21,11 @@ const DonnerHome = () => {
   const viewModalRef = useRef(null);
   const UpdateModalRef = useRef(null);
   const axiosSecure = UseAxiosSecure();
-  const { data: donnerd = [], refetch } = useQuery({
+  const {
+    data: donnerd = [],
+    refetch,
+    isLoading,
+  } = useQuery({
     queryKey: ["donners", user?.email],
     queryFn: async () => {
       const result = await axiosSecure.get(`/donners?email=${user.email}`);
@@ -35,8 +40,7 @@ const DonnerHome = () => {
       .then((res) => res.json())
       .then((data) => {
         setAllUpazila(data);
-      })
-      .catch((err) => console.error("Error loading upazila data:", err));
+      });
   }, []);
 
   const DistrictData = useLoaderData();
@@ -124,6 +128,7 @@ const DonnerHome = () => {
       }
     });
   };
+  if (isLoading) return <Loading></Loading>;
   return (
     <div>
       <div>

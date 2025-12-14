@@ -6,6 +6,7 @@ import { ImBin2, ImCancelCircle } from "react-icons/im";
 import { GiConfirmed } from "react-icons/gi";
 import UseAxiosSecure from "../AuthProvider/UseAxiosSecure";
 import Swal from "sweetalert2";
+import Loading from "../Loading/Loading";
 
 const VolenteerAllDonor = () => {
   const { user } = UseAuth();
@@ -13,7 +14,11 @@ const VolenteerAllDonor = () => {
   const [donnerDetails, setDonnerDetails] = useState([]);
   const viewModalRef = useRef(null);
   const axiosSecure = UseAxiosSecure();
-  const { data: donners = [], refetch } = useQuery({
+  const {
+    data: donners = [],
+    refetch,
+    isLoading,
+  } = useQuery({
     queryKey: ["donners", user?.email],
     queryFn: async () => {
       const result = await axiosSecure.get(`/donners/all`);
@@ -48,6 +53,7 @@ const VolenteerAllDonor = () => {
   const handleCancel = (donor) => {
     updateStatus(donor, "canceled");
   };
+  if (isLoading) return <Loading></Loading>;
   return (
     <div>
       <div>

@@ -3,6 +3,7 @@ import Logo from "../assets/Logo.png";
 import { Link, NavLink } from "react-router";
 import UseAuth from "../AuthProvider/UseAuth";
 import { toast } from "react-toastify";
+import { BiLogOut } from "react-icons/bi";
 const Navbar = () => {
   const { user, LogOutUser } = UseAuth();
   // console.log(user);
@@ -37,6 +38,9 @@ const Navbar = () => {
         className="hover:bg-amber-500 p-1 pl-2 rounded"
       >
         Search Blood
+      </NavLink>
+      <NavLink to={"/funding"} className="hover:bg-amber-500 p-1 pl-2 rounded">
+        Funding
       </NavLink>
     </div>
   );
@@ -79,8 +83,11 @@ const Navbar = () => {
               </Link>
             )}
             {user ? (
-              <div onClick={handleLogOut} className="btn bg-white border-0">
-                LogOut
+              <div
+                onClick={handleLogOut}
+                className="btn flex items-center gap-2 bg-white border-0"
+              >
+                <BiLogOut size={20} /> <span>LogOut</span>
               </div>
             ) : (
               <Link to={"/login"} className="btn bg-white border-0">

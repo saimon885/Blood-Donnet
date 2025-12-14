@@ -8,6 +8,7 @@ import { ImBin2 } from "react-icons/im";
 import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
 import Swal from "sweetalert2";
+import Loading from "../Loading/Loading";
 
 const MyDonnetionRequest = () => {
   const { user } = UseAuth();
@@ -18,7 +19,11 @@ const MyDonnetionRequest = () => {
   const viewModalRef = useRef(null);
   const UpdateModalRef = useRef(null);
   const axiosSecure = UseAxiosSecure();
-  const { data: donners = [], refetch } = useQuery({
+  const {
+    data: donners = [],
+    refetch,
+    isLoading,
+  } = useQuery({
     queryKey: ["donners", user?.email],
     queryFn: async () => {
       const result = await axiosSecure.get(`/donners?email=${user.email}`);
@@ -121,6 +126,7 @@ const MyDonnetionRequest = () => {
       }
     });
   };
+  if (isLoading) return <Loading></Loading>;
   return (
     <div>
       <div>

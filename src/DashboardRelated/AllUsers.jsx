@@ -5,10 +5,11 @@ import { MdAdminPanelSettings, MdVolunteerActivism } from "react-icons/md";
 import { HiMiniUserPlus } from "react-icons/hi2";
 import { TbLock, TbLockOpen } from "react-icons/tb";
 import Swal from "sweetalert2";
+import Loading from "../Loading/Loading";
 
 const AllUsers = () => {
   const axiosSecure = UseAxiosSecure();
-  const { data: allUsers = [], refetch } = useQuery({
+  const { data: allUsers = [], refetch,isLoading} = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
       const result = await axiosSecure.get("/users/alladminusers");
@@ -80,6 +81,7 @@ const AllUsers = () => {
   const statusBlock = (user) => {
     updateStatus(user, "blocked");
   };
+    if (isLoading) return <Loading></Loading>;
   return (
     <div>
       <h2>Users {allUsers.length}</h2>

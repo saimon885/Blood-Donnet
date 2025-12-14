@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useRef } from "react";
 import { useParams } from "react-router";
 import UseAxiosSecure from "../AuthProvider/UseAxiosSecure";
-import ErrorElement from "../Loading/ErrorElement";
 import UseAuth from "../AuthProvider/UseAuth";
 import Swal from "sweetalert2";
 import Loading from "../Loading/Loading";
@@ -16,7 +15,6 @@ const BloodDonnetionDetailsPage = () => {
   const {
     data: donnersDetails = {},
     isLoading,
-    isError,
     refetch,
   } = useQuery({
     queryKey: ["donners", id],
@@ -35,13 +33,6 @@ const BloodDonnetionDetailsPage = () => {
     return <Loading></Loading>;
   }
 
-  if (isError || !donnersDetails._id) {
-    return (
-      <div>
-        <ErrorElement></ErrorElement>
-      </div>
-    );
-  }
   const handleConfirmDonation = (donor) => {
     console.log(donor);
     const updateInfo = {

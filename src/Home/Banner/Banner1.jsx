@@ -69,9 +69,12 @@ const Banner1 = () => {
                 Donate Now
               </Link>
             )}
-            <button className="btn text-[18px] hover:bg-white hover:text-black bg-transparent rounded-2xl text-white ">
+            <Link
+              to={"/search-blood-requests"}
+              className="btn text-[18px] hover:bg-white hover:text-black bg-transparent rounded-2xl text-white "
+            >
               Find Donnor
-            </button>
+            </Link>
           </div>
         </div>
         <div data-aos="fade-left">

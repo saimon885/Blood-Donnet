@@ -7,6 +7,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Loading from "../Loading/Loading";
 
 const Profile = () => {
   const { user } = UseAuth();
@@ -23,7 +24,11 @@ const Profile = () => {
     formState: { errors },
   } = useForm();
   const [allUpazila, setAllUpazila] = useState([]);
-  const { data: users = [], refetch } = useQuery({
+  const {
+    data: users = [],
+    refetch,
+    isLoading,
+  } = useQuery({
     queryKey: ["/users", user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`/users?email=${user.email}`);
@@ -91,7 +96,6 @@ const Profile = () => {
         bloodGroup: data.Blood,
         district: data.district,
         upazila: data.upazila,
-        
       };
 
       // Database update
@@ -105,6 +109,7 @@ const Profile = () => {
       toast.error("Update failed! Please try again.");
     }
   };
+  if (isLoading) return <Loading></Loading>;
   return (
     <div>
       <div>

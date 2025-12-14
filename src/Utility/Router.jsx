@@ -19,6 +19,9 @@ import ErrorElement from "../Loading/ErrorElement";
 import AllBloodDonnetRequest from "../DashboardRelated/AllBloodDonnetRequest";
 import BloodDonnetionDetailsPage from "../DashboardRelated/BloodDonnetionDetailsPage";
 import BloodRequest from "../DashboardRelated/BloodRequest";
+import Funding from "../Pages/Funding";
+import PaymentSuccess from "../Pages/PaymentSuccess";
+import PaymentCancel from "../Pages/PaymentCancel";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +36,18 @@ export const router = createBrowserRouter([
       {
         path: "login",
         Component: Login,
+      },
+      {
+        path: "payment-success",
+        Component: PaymentSuccess,
+      },
+      {
+        path: "payment-cancelled",
+        Component: PaymentCancel,
+      },
+      {
+        path: "funding",
+        element: <Funding></Funding>,
       },
       {
         path: "register",

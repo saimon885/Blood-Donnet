@@ -4,6 +4,7 @@ import UseAuth from "../AuthProvider/UseAuth";
 import UseAxiosSecure from "../AuthProvider/UseAxiosSecure";
 import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router";
+import Loading from "../Loading/Loading";
 
 const AllBloodDonnetRequest = () => {
   const { user } = UseAuth();
@@ -13,7 +14,6 @@ const AllBloodDonnetRequest = () => {
   const {
     data: donners = [],
     isLoading,
-    error,
   } = useQuery({
     queryKey: ["donners", user?.email],
     queryFn: async () => {
@@ -26,8 +26,7 @@ const AllBloodDonnetRequest = () => {
     (donner) => donner.status === "pending"
   );
 
-  if (isLoading) return <div>Loading Requests...</div>;
-  if (error) return <div>An error occurred: {error.message}</div>;
+  if (isLoading) return <Loading></Loading>;
 
   return (
     <div>
