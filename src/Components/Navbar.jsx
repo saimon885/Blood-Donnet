@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import Logo from "../assets/Logo.png";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink } from "react-router"; 
 import UseAuth from "../AuthProvider/UseAuth";
 import { toast } from "react-toastify";
 import { BiLogOut } from "react-icons/bi";
+import { FiMenu, FiX } from "react-icons/fi";
+
 const Navbar = () => {
   const { user, LogOutUser } = UseAuth();
-  // console.log(user);
   const [isHovering, setIsHovering] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
   const handleMouseEnter = () => {
     setIsHovering(true);
   };
@@ -16,160 +19,158 @@ const Navbar = () => {
     setIsHovering(false);
   };
 
-  const Links = (
-    <div className=" flex lg:flex-row flex-col gap-2 md:gap-4">
-      <NavLink className={"hover:bg-red-500 p-1 pl-2 rounded"} to={"/"}>
-        Home
-      </NavLink>
-      <NavLink
-        to={"/blood-donation-requests"}
-        className="hover:bg-red-500 p-1 pl-2 rounded"
-      >
-        Blood-Donation-Requests
-      </NavLink>
-      <NavLink
-        to={"/search-blood-requests"}
-        className="hover:bg-red-500 p-1 pl-2 rounded"
-      >
-        Search Blood
-      </NavLink>
-      <NavLink
-        className={"hover:bg-red-500 p-1 pl-2 rounded"}
-        to={"/dashboard"}
-      >
-        DashBoard
-      </NavLink>
-      <NavLink to={"/funding"} className="hover:bg-red-500 p-1 pl-2 rounded">
-        Funding
-      </NavLink>
-    </div>
-  );
   const handleLogOut = () => {
     LogOutUser()
       .then(() => {
         toast.success("LogOut Successfull.");
       })
-      .catch();
+      .catch((error) => {
+        console.error("LogOut Error:", error);
+        toast.error("LogOut failed.");
+      });
   };
+
+  const navLinkClasses = ({ isActive }) =>
+    `px-4 py-2 transition duration-300 ease-in-out font-medium text-lg rounded-full ${
+      isActive
+        ? "bg-red-600 text-white shadow-md"
+        : "lg:text-gray-100 hover:bg-red-500/80 hover:text-white"
+    }`;
+
+  const Links = (
+    <div className="flex flex-col lg:flex-row gap-2 lg:gap-1">
+      <NavLink className={navLinkClasses} to={"/"}>
+        Home
+      </NavLink>
+      <NavLink className={navLinkClasses} to={"/blood-donation-requests"}>
+        Requests
+      </NavLink>
+      <NavLink className={navLinkClasses} to={"/search-blood-requests"}>
+        Search Blood
+      </NavLink>
+      <NavLink className={navLinkClasses} to={"/dashboard"}>
+        Dashboard
+      </NavLink>
+      <NavLink className={navLinkClasses} to={"/funding"}>
+        Funding
+      </NavLink>
+    </div>
+  );
+
   return (
-    <div className="navbar flex items-center bg-linear-to-r/srgb from-secondary to-primary shadow-sm">
-      <div className="navbar-start">
-        <Link to={"/"} className="">
-          <img className="w-[140px]" src={Logo} alt="" />
-        </Link>
-      </div>
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1 text-[#F9FAFB] text-[18px]">
-          {Links}
-        </ul>
-      </div>
-      <div className="navbar-end">
-        <div className="hidden lg:block">
-          <div className="flex items-center gap-1">
+    <div className="shadow-lg sticky top-0 z-50 bg-gradient-to-r from-red-700 to-red-900 border-b border-red-900">
+      <div className="navbar container mx-auto px-4 sm:px-6 lg:px-8 py-2">
+        <div className="navbar-start">
+          <Link to={"/"} className="flex items-center">
+            <img className="w-[120px] sm:w-[150px]" src={Logo} alt="Logo" />
+          </Link>
+        </div>
+        <div className="navbar-center hidden lg:flex">
+          <ul className="menu menu-horizontal p-0 space-x-2 text-black">{Links}</ul>
+        </div>
+
+
+        <div className="navbar-end flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-3">
             {user && (
-              <div className="relative inline-block w-[60px] h-[60px] p-2 mr-2">
+              <div
+                className="relative cursor-pointer"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >
                 <img
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
-                  className="rounded-full border-2 border-green-700 mx-auto h-full w-full object-cover"
-                  src={`${user ? user.photoURL : ""}`}
+                  className="rounded-full border-3 border-white h-12 w-12 object-cover transition duration-300 hover:scale-105"
+                  src={user.photoURL || "default-avatar.png"} // Fallback image for safety
                   alt="User Profile"
                 />
-                {user && isHovering && (
-                  <div className="absolute -top-2 md:-top-1 right-14 md:right-16 p-5 text-white z-10 flex-nowrap">
-                    {user.displayName}
+                {isHovering && (
+                  <div className="absolute top-14 right-0 mt-2 p-2 bg-gray-800 text-white text-sm rounded-md shadow-lg whitespace-nowrap">
+                    {user.displayName || "User"}
                   </div>
                 )}
               </div>
             )}
             {user ? (
-              <div
+              <button
                 onClick={handleLogOut}
-                className="btn flex items-center gap-2 bg-white border-0"
+                className="btn btn-sm text-sm bg-white text-red-700 hover:bg-gray-100 border-0 flex items-center gap-2 font-semibold transition duration-300"
               >
-                <BiLogOut size={20} /> <span>LogOut</span>
-              </div>
+                <BiLogOut size={20} />{" "}
+                <span className="hidden sm:inline">Log Out</span>
+              </button>
             ) : (
-              <Link to={"/login"} className="btn bg-white border-0">
-                LogIn
+              <Link
+                to={"/login"}
+                className="btn btn-sm text-sm bg-white text-red-700 hover:bg-gray-100 border-0 font-semibold transition duration-300"
+              >
+                Log In
               </Link>
             )}
           </div>
-        </div>
-        <div>
-          <div className="dropdown">
-            <div className="drawer drawer-end">
-              <input
-                id="my-drawer-1"
-                type="checkbox"
-                className="drawer-toggle "
-              />
-              <div className="drawer-content flex items-center lg:hidden">
-                <div>
-                  {" "}
-                  {user && (
-                    <div className="relative inline-block w-[60px] h-[60px] p-2 mr-2">
-                      <img
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                        className="rounded-full border-2 border-green-700 mx-auto h-full w-full object-cover"
-                        src={`${user ? user.photoURL : ""}`}
-                        alt="User Profile"
-                      />
-                      {user && isHovering && (
-                        <div className="absolute -top-2 md:-top-1 right-14 md:right-16 p-5 text-white z-10 flex-nowrap">
-                          {user.displayName}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-                <label htmlFor="my-drawer-1" className="drawer-button">
-                  <svg
-                    className="swap-off fill-current bg-transparent text-white text-2xl"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="32"
-                    height="32"
-                    viewBox="0 0 512 512"
-                  >
-                    <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
-                  </svg>
-                </label>
-              </div>
-              <div className="drawer-side">
-                <label
-                  htmlFor="my-drawer-1"
-                  aria-label="close sidebar"
-                  className="drawer-overlay"
-                ></label>
-                <ul className="menu bg-[#ffffff] mt-20 mr-2 min-h-[450px] w-70 rounded-2xl border border-4xl border-primary  p-4">
-                  {/* Sidebar content here */}
-                  <div>
-                    <h2 className="text-3xl font-bold text-primary mb-4">
-                      Menu
-                    </h2>
-                  </div>
-                  <ul className="text-[18px]">{Links}</ul>
-                  <div className="mt-8 w-full">
-                    {user ? (
-                      <div
-                        onClick={handleLogOut}
-                        className="btn w-full btn-secondary"
-                      >
-                        LogOut
-                      </div>
-                    ) : (
-                      <Link to={"/login"} className="btn w-full btn-secondary">
-                        LogIn
-                      </Link>
-                    )}
-                  </div>
-                </ul>
-              </div>
-            </div>
+
+          <div className="lg:hidden">
+            <button
+              onClick={() => setIsDrawerOpen(!isDrawerOpen)}
+              className="p-2 text-white transition duration-300 focus:outline-none"
+              aria-label="Toggle Menu"
+            >
+              {isDrawerOpen ? <FiX size={28} /> : <FiMenu size={28} />}
+            </button>
           </div>
         </div>
       </div>
+
+      {isDrawerOpen && (
+        <div className="fixed inset-0 z-40 lg:hidden">
+          <div
+            className="fixed inset-0 bg-black opacity-50"
+            onClick={() => setIsDrawerOpen(false)}
+          ></div>
+          <div className="fixed top-0 right-0 h-full w-64 bg-white shadow-xl p-4 transform transition-transform duration-300 ease-in-out">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-red-700">Menu</h2>
+              <button
+                onClick={() => setIsDrawerOpen(false)}
+                className="text-gray-700 hover:text-red-700"
+              >
+                <FiX size={24} />
+              </button>
+            </div>
+            <ul className="space-y-3 border-b pb-4">{Links}</ul>
+
+
+            <div className="mt-6 space-y-4">
+              {user && (
+                <div className="flex items-center gap-3 p-2 bg-gray-100 rounded-lg">
+                  <img
+                    className="rounded-full h-10 w-10 object-cover border-2 border-red-700"
+                    src={user.photoURL || "default-avatar.png"}
+                    alt="User Profile"
+                  />
+                  <span className="font-semibold text-gray-800">
+                    {user.displayName || "User Profile"}
+                  </span>
+                </div>
+              )}
+              {user ? (
+                <button
+                  onClick={handleLogOut}
+                  className="w-full btn bg-red-700 text-white hover:bg-red-800 border-0 flex items-center justify-center font-semibold"
+                >
+                  <BiLogOut size={20} /> Log Out
+                </button>
+              ) : (
+                <Link
+                  to={"/login"}
+                  className="w-full btn bg-red-700 text-white hover:bg-red-800 border-0 flex items-center justify-center font-semibold"
+                >
+                  Log In
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

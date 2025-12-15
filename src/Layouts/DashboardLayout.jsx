@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, Outlet, useLocation } from "react-router";
-import { FaFileMedical, FaUser, FaUsers } from "react-icons/fa";
+import { FaFileMedical, FaTint, FaUser, FaUsers } from "react-icons/fa";
 import { MdCreateNewFolder } from "react-icons/md";
 import { LuTally5 } from "react-icons/lu";
 import UseRole from "../AuthProvider/UseRole";
@@ -24,15 +24,13 @@ const DashBoardLayout = () => {
         onClick={closeDrawer}
         className={`flex items-center gap-3 p-3 text-base font-semibold rounded-lg transition-all duration-200 w-full whitespace-nowrap overflow-hidden ${
           isActive(to)
-            ? "bg-primary text-white shadow-lg" 
-            : "text-gray-700 hover:bg-red-50/70 hover:text-primary" 
+            ? "bg-primary text-white shadow-lg"
+            : "text-gray-700 hover:bg-red-50/70 hover:text-primary"
         } lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right`}
         data-tip={dataTip}
       >
-        <Icon className="w-5 h-5 flex-shrink-0" /> 
-        <span className="truncate"> 
-          {label}
-        </span>
+        <Icon className="w-5 h-5 flex-shrink-0" />
+        <span className="truncate">{label}</span>
       </Link>
     </li>
   );
@@ -40,7 +38,7 @@ const DashBoardLayout = () => {
   const dashboardTitle = (
     <div className="px-3 text-2xl font-extrabold uppercase flex items-center">
       <span className="text-primary mr-1 uppercase mr-2">{role}</span>
-      <span className="text-gray-800 font-normal">Dashboard</span> 
+      <span className="text-gray-800 font-normal">Dashboard</span>
     </div>
   );
 
@@ -50,11 +48,10 @@ const DashBoardLayout = () => {
       <div className="drawer-content flex flex-col">
         <nav className="navbar w-full bg-white shadow-md p-0 h-16 sticky top-0 z-20">
           <div className="flex-1">
-
             <label
               htmlFor="my-drawer-4"
               aria-label="open sidebar"
-              className="btn btn-square btn-ghost lg:hidden ml-2" 
+              className="btn btn-square btn-ghost lg:hidden ml-2"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -70,30 +67,30 @@ const DashBoardLayout = () => {
                 ></path>
               </svg>
             </label>
-          
+
             {dashboardTitle}
           </div>
-          <div className="flex-none">
-          </div>
+          <div className="flex-none"></div>
         </nav>
-        
+
         {/* Main Content Area */}
         <main className="p-4 flex-grow">
           <Outlet />
         </main>
       </div>
 
-      <div className="drawer-side z-30"> 
+      <div className="drawer-side z-30">
         <label
           htmlFor="my-drawer-4"
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-    
-        <div className="flex flex-col min-h-full bg-white text-gray-800 shadow-xl w-72"> 
-          
-      
-          <Link to={"/"} className="p-4 flex items-center justify-start border-b h-16">
+
+        <div className="flex flex-col min-h-full bg-white text-gray-800 shadow-xl w-72">
+          <Link
+            to={"/"}
+            className="p-4 flex items-center justify-start border-b h-16"
+          >
             <div className="flex items-center">
               <img
                 src="https://img.icons8.com/?size=48&id=26115&format=png"
@@ -106,18 +103,14 @@ const DashBoardLayout = () => {
             </div>
           </Link>
 
-    
           <ul className="menu p-4 w-full grow space-y-2">
-            
-      
             {renderMenuItem("/dashboard/Profile", FaUser, "Profile", "Profile")}
 
-       
             {role === "donor" && (
               <>
                 {renderMenuItem(
                   "/dashboard/My-donation-request",
-                  FaFileMedical,
+                  FaTint,
                   "My Donation Request",
                   "My Donation"
                 )}
@@ -140,25 +133,23 @@ const DashBoardLayout = () => {
                 )}
                 {renderMenuItem(
                   "/dashboard/all-blood-donation-request",
-                  LuTally5,
+                  FaTint,
                   "Blood Donation Requests",
                   "All Blood Donation"
                 )}
               </>
             )}
 
-        
             {role === "volunteer" && (
               <>
                 {renderMenuItem(
                   "/dashboard/volunteerAllDonor",
-                  LuTally5,
+                  FaTint,
                   "Blood Donation Requests",
                   "All Blood Donation"
                 )}
               </>
             )}
-            
           </ul>
           <div className="p-4 border-t text-sm text-center text-gray-500">
             © BloodHive

@@ -175,6 +175,8 @@ const Alldonor = () => {
                       className={`px-4 py-3 font-bold uppercase ${
                         donner.status === "completed"
                           ? "text-green-600"
+                          : donner.status === "Done"
+                          ? "text-green-600"
                           : "text-red-600"
                       }`}
                     >

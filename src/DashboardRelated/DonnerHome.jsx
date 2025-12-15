@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import UseAuth from "../AuthProvider/UseAuth";
 import UseAxiosSecure from "../AuthProvider/UseAxiosSecure";
 import { FaRegEye } from "react-icons/fa";
-import { MdModeEdit } from "react-icons/md";
+import { MdCancel, MdDoneOutline, MdModeEdit } from "react-icons/md";
 import { ImBin2 } from "react-icons/im";
 import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
@@ -18,6 +18,7 @@ const formatDateTime = (dateStr, timeStr) => {
   const dateObj = parse(combinedStr, "yyyy-MM-dd HH:mm", new Date());
   return format(dateObj, "dd MMM, yyyy | hh:mm a");
 };
+
 const DonnerHome = () => {
   const { user } = UseAuth();
   const { role } = UseRole();
@@ -133,6 +134,30 @@ const DonnerHome = () => {
       }
     });
   };
+
+  const updateStatus = (donor, status) => {
+    const updateInfo = {
+      status: status,
+    };
+    axiosSecure.patch(`/donners/${donor._id}`, updateInfo).then((res) => {
+      if (res.data.modifiedCount) {
+        refetch();
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: `donnetion status has been updated and this ${status}`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    });
+  };
+  const handleConfirm = (donor) => {
+    updateStatus(donor, "Done");
+  };
+  const handleCancel = (donor) => {
+    updateStatus(donor, "Cancel");
+  };
   if (isLoading) return <Loading></Loading>;
   return (
     <div>
@@ -140,12 +165,14 @@ const DonnerHome = () => {
         <h1 className="text-4xl font-bold text-secondary my-4">
           Welcome - {user?.displayName}💐🌼
         </h1>
-        {role === "donor" && (
+        {role === "donor" && donners.length > 0 && (
           <>
             {" "}
             <div>
               {" "}
-              <h2 className="text-xl my-4 md:text-2xl">Recent Donetion Request</h2>
+              <h2 className="text-xl my-4 md:text-2xl">
+                Recent Donetion Request
+              </h2>
               <div className="overflow-x-auto rounded-xl shadow-lg">
                 {" "}
                 <table className="table min-w-full">
@@ -160,6 +187,7 @@ const DonnerHome = () => {
                       <th className="py-3 px-4">Blood Group</th>{" "}
                       <th className="py-3 px-4">Status</th>{" "}
                       <th className="py-3 px-4 text-center">Actions</th>{" "}
+                      <th className="py-3 px-4 text-center">Status Actions</th>{" "}
                     </tr>{" "}
                   </thead>{" "}
                   <tbody>
@@ -188,6 +216,8 @@ const DonnerHome = () => {
                         <td
                           className={`px-4 py-3 font-bold uppercase ${
                             donner.status === "completed"
+                              ? "text-green-600"
+                              : donner.status === "Done"
                               ? "text-green-600"
                               : "text-red-600"
                           }`}
@@ -218,6 +248,22 @@ const DonnerHome = () => {
                             <ImBin2 />{" "}
                           </button>{" "}
                         </td>{" "}
+                        {donner.status === "in-progress" && (
+                          <td>
+                            <button
+                              onClick={() => handleConfirm(donner)}
+                              className="btn btn-sm bg-green-500 hover:bg-green-600 p-2 rounded-lg"
+                            >
+                              <MdDoneOutline />
+                            </button>
+                            <button
+                              onClick={() => handleCancel(donner)}
+                              className="btn btn-sm bg-red-500 hover:bg-red-600 ml-2 p-2 rounded-lg"
+                            >
+                              <MdCancel />
+                            </button>
+                          </td>
+                        )}
                       </tr>
                     ))}{" "}
                   </tbody>{" "}

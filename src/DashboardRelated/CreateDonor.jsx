@@ -4,6 +4,7 @@ import UseAuth from "../AuthProvider/UseAuth";
 import { useLoaderData } from "react-router";
 import UseAxiosSecure from "../AuthProvider/UseAxiosSecure";
 import Swal from "sweetalert2";
+import { useQuery } from "@tanstack/react-query";
 
 const CreateDonor = () => {
   const { user } = UseAuth();
@@ -15,9 +16,25 @@ const CreateDonor = () => {
       .then((res) => res.json())
       .then((data) => {
         setAllUpazila(data);
-      })
-      
+      });
   }, []);
+
+  const { data: allUsers = [] } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const result = await axiosSecure.get("/users/alladminusers");
+      return result.data;
+    },
+  });
+
+  const currentUserData = allUsers.find((u) => u.email === user?.email);
+  const isUserBlocked = currentUserData?.status === "blocked";
+  const Users = allUsers.map((user) => {
+    return {
+      status: user.status,
+      email: user.email,
+    };
+  });
 
   const DistrictData = useLoaderData();
   const DistrictDuplicate = DistrictData.map((c) => c.name);
@@ -42,6 +59,14 @@ const CreateDonor = () => {
   };
 
   const handleCreateDonor = (data) => {
+    if (isUserBlocked) {
+      Swal.fire({
+        icon: "error",
+        title: "Access Denied",
+        text: "Your account has been blocked. So you can't create a donation request.",
+      });
+      return;
+    }
 
     axiosSecure.post("/donners", data).then((res) => {
       if (res.data.insertedId) {
@@ -49,7 +74,7 @@ const CreateDonor = () => {
         Swal.fire({
           position: "top-end",
           icon: "success",
-          title: `donnetion Request has been Created.`,
+          title: `Donation Request has been Created.`,
           showConfirmButton: false,
           timer: 1500,
         });
@@ -65,7 +90,6 @@ const CreateDonor = () => {
           <fieldset className="fieldset">
             <div className="grid grid-cols-2 gap-5 w-full">
               <div>
-                {/* Requester name */}
                 <fieldset>
                   <legend className="fieldset-legend">Your Name</legend>
                   <input
@@ -97,7 +121,6 @@ const CreateDonor = () => {
                     <option disabled={true} value={""}>
                       Pick a Group
                     </option>
-
                     <option>A+</option>
                     <option>A-</option>
                     <option>B+</option>
@@ -208,11 +231,23 @@ const CreateDonor = () => {
               </div>
             </div>
           </fieldset>
+
           <input
-            className="btn btn-primary mt-4"
+            className={`btn mt-4 ${
+              isUserBlocked
+                ? "btn-disabled bg-red-400 text-white cursor-not-allowed"
+                : "btn-primary"
+            }`}
             type="submit"
-            value="Request"
+            value={isUserBlocked ? "Blocked" : "Request"}
+            disabled={isUserBlocked}
           />
+          {isUserBlocked && (
+            <p className="text-red-500 mt-2 font-medium">
+              Your account has been blocked. So you can't create a donation
+              request.
+            </p>
+          )}
         </form>
       </div>
     </div>

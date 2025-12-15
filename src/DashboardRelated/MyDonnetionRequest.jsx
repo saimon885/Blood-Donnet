@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import UseAuth from "../AuthProvider/UseAuth";
 import UseAxiosSecure from "../AuthProvider/UseAxiosSecure";
 import { FaRegEye } from "react-icons/fa";
-import { MdModeEdit } from "react-icons/md";
+import { MdCancel, MdDoneOutline, MdModeEdit } from "react-icons/md";
 import { ImBin2 } from "react-icons/im";
 import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
@@ -131,6 +131,29 @@ const MyDonnetionRequest = () => {
       }
     });
   };
+  const updateStatus = (donor, status) => {
+    const updateInfo = {
+      status: status,
+    };
+    axiosSecure.patch(`/donners/${donor._id}`, updateInfo).then((res) => {
+      if (res.data.modifiedCount) {
+        refetch();
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: `donnetion status has been updated and this ${status}`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    });
+  };
+  const handleConfirm = (donor) => {
+    updateStatus(donor, "Done");
+  };
+  const handleCancel = (donor) => {
+    updateStatus(donor, "Cancel");
+  };
   if (isLoading) return <Loading></Loading>;
   return (
     <div className="p-4 sm:p-8">
@@ -155,6 +178,7 @@ const MyDonnetionRequest = () => {
                   <th className="py-3 px-4">Blood Group</th>{" "}
                   <th className="py-3 px-4">Status</th>{" "}
                   <th className="py-3 px-4 text-center">Actions</th>{" "}
+                  <th className="py-3 px-4 text-center">Status D/C</th>{" "}
                 </tr>{" "}
               </thead>{" "}
               <tbody>
@@ -181,7 +205,9 @@ const MyDonnetionRequest = () => {
                       className={`px-4 py-3 font-bold uppercase ${
                         donner.status === "completed"
                           ? "text-green-600"
-                          : "text-red-600"
+                        : donner.status === "Done"
+                        ? "text-green-600"
+                        : "text-red-600"
                       }`}
                     >
                       {donner.status}{" "}
@@ -210,6 +236,22 @@ const MyDonnetionRequest = () => {
                         <ImBin2 />{" "}
                       </button>{" "}
                     </td>{" "}
+                    {donner.status === "in-progress" && (
+                      <td>
+                        <button
+                          onClick={() => handleConfirm(donner)}
+                          className="btn btn-sm bg-green-500 hover:bg-green-600 p-2 rounded-lg"
+                        >
+                          <MdDoneOutline />
+                        </button>
+                        <button
+                          onClick={() => handleCancel(donner)}
+                          className="btn btn-sm bg-red-500 hover:bg-red-600 ml-2 p-2 rounded-lg"
+                        >
+                          <MdCancel />
+                        </button>
+                      </td>
+                    )}
                   </tr>
                 ))}{" "}
               </tbody>{" "}

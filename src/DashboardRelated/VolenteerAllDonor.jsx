@@ -100,6 +100,8 @@ const VolenteerAllDonor = () => {
                       className={`${
                         donner.status === "completed"
                           ? "text-green-600"
+                          : donner.status === "Done"
+                          ? "text-green-600"
                           : "text-red-600"
                       } font-bold`}
                     >
