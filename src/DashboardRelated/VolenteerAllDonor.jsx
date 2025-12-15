@@ -7,7 +7,14 @@ import { GiConfirmed } from "react-icons/gi";
 import UseAxiosSecure from "../AuthProvider/UseAxiosSecure";
 import Swal from "sweetalert2";
 import Loading from "../Loading/Loading";
+import { format, parse } from "date-fns";
 
+const formatDateTime = (dateStr, timeStr) => {
+  if (!dateStr || !timeStr) return "N/A";
+  const combinedStr = `${dateStr} ${timeStr}`;
+  const dateObj = parse(combinedStr, "yyyy-MM-dd HH:mm", new Date());
+  return format(dateObj, "dd MMM, yyyy | hh:mm a");
+};
 const VolenteerAllDonor = () => {
   const { user } = UseAuth();
 
@@ -66,8 +73,7 @@ const VolenteerAllDonor = () => {
                   <th>#</th>
                   <th>Recipient Name</th>
                   <th>Location</th>
-                  <th>Date</th>
-                  <th>Time</th>
+                  <th>Date & Time</th>
                   <th>Blood Group</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -82,8 +88,13 @@ const VolenteerAllDonor = () => {
                     <td>
                       {donner.recipentDistrict},{donner.recipientUpazila}
                     </td>
-                    <td>{donner.donetionDate}</td>
-                    <td>{donner.donetionTime}</td>
+                    <td>
+                      {" "}
+                      {formatDateTime(
+                        donner.donetionDate,
+                        donner.donetionTime
+                      )}{" "}
+                    </td>
                     <td>{donner.Blood}</td>
                     <td
                       className={`${
@@ -135,7 +146,7 @@ const VolenteerAllDonor = () => {
             <div>
               <div class=" rounded-box border border-base-content/5 bg-base-100 shadow-xl">
                 <div class="bg-secondary text-white p-3">
-                  <h2 class="text-lg font-bold">Donner All Information</h2>
+                  <h2 class="text-lg font-bold">All Information</h2>
                 </div>
                 <div class="p-4 space-y-2">
                   <div class="flex gap-5 items-center text-sm">
@@ -176,10 +187,12 @@ const VolenteerAllDonor = () => {
                     <span class="text-right">{donnerDetails.address}</span>
                   </div>
                   <div class="flex gap-5 items-center text-sm">
-                    <span class="font-semibold">Donnetion Time And Date </span>
+                    <span class="font-semibold">Donnetion Date And Time</span>
                     <span class="text-right">
-                      {donnerDetails.donetionDate} /{" "}
-                      {donnerDetails.donetionTime}
+                      {formatDateTime(
+                        donnerDetails.donetionDate,
+                        donnerDetails.donetionTime
+                      )}{" "}
                     </span>
                   </div>
                   <div class="flex gap-5 items-center text-sm">

@@ -5,7 +5,14 @@ import UseAxiosSecure from "../AuthProvider/UseAxiosSecure";
 import UseAuth from "../AuthProvider/UseAuth";
 import Swal from "sweetalert2";
 import Loading from "../Loading/Loading";
+import { format, parse } from "date-fns";
 
+const formatDateTime = (dateStr, timeStr) => {
+  if (!dateStr || !timeStr) return "N/A";
+  const combinedStr = `${dateStr} ${timeStr}`;
+  const dateObj = parse(combinedStr, "yyyy-MM-dd HH:mm", new Date());
+  return format(dateObj, "dd MMM, yyyy | hh:mm a");
+};
 const BloodDonnetionDetailsPage = () => {
   const { id } = useParams();
   const { user } = UseAuth();
@@ -54,6 +61,7 @@ const BloodDonnetionDetailsPage = () => {
 
   return (
     <div className="max-w-md p-3 mx-auto">
+      
       <div className="py-4 ">
         <div>
           <div className="rounded-2xl border border-base-content/5 bg-base-100 shadow-xl">
@@ -103,7 +111,10 @@ const BloodDonnetionDetailsPage = () => {
               <div className="flex justify-between items-center text-sm">
                 <span className="font-semibold">Donnetion Time And Date :</span>
                 <span className="text-right">
-                  {donnersDetails.donetionDate} / {donnersDetails.donetionTime}
+                  {formatDateTime(
+                    donnersDetails.donetionDate,
+                    donnersDetails.donetionTime
+                  )}{" "}
                 </span>
               </div>
               <div className="flex justify-between items-center text-sm">

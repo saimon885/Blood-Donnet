@@ -22,11 +22,11 @@ const Banner1 = () => {
     <div className="bg-secondary ">
       <div className="flex flex-col md:flex-row justify-between items-center gap-10 mx-10 py-20 ">
         <div data-aos="fade-right" className="text-center space-y-5 text-white">
-          <h1 className="text-4xl font-bold text-white">
+          <h1 className="text-3xl md:text-4xl font-bold text-white">
             Save Lives.
             <span className="text-yellow-500">{text}</span>{" "}
           </h1>
-          <p className="text-xl">
+          <p className="md:text-xl">
             Your donation can give someone a second chance at life. Join
             thousands of heroes making a difference every day in Bangladesh.
           </p>

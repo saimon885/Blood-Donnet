@@ -17,7 +17,7 @@ const Navbar = () => {
   };
 
   const Links = (
-    <div className=" flex md:flex-row flex-col gap-2 md:gap-4">
+    <div className=" flex lg:flex-row flex-col gap-2 md:gap-4">
       <NavLink className={"hover:bg-red-500 p-1 pl-2 rounded"} to={"/"}>
         Home
       </NavLink>
@@ -54,9 +54,9 @@ const Navbar = () => {
   return (
     <div className="navbar flex items-center bg-linear-to-r/srgb from-secondary to-primary shadow-sm">
       <div className="navbar-start">
-        <div className="">
+        <Link to={"/"} className="">
           <img className="w-[140px]" src={Logo} alt="" />
-        </div>
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 text-[#F9FAFB] text-[18px]">
@@ -67,7 +67,7 @@ const Navbar = () => {
         <div className="hidden lg:block">
           <div className="flex items-center gap-1">
             {user && (
-              <Link className="relative inline-block w-[60px] h-[60px] p-2 mr-2">
+              <div className="relative inline-block w-[60px] h-[60px] p-2 mr-2">
                 <img
                   onMouseEnter={handleMouseEnter}
                   onMouseLeave={handleMouseLeave}
@@ -80,7 +80,7 @@ const Navbar = () => {
                     {user.displayName}
                   </div>
                 )}
-              </Link>
+              </div>
             )}
             {user ? (
               <div
@@ -108,7 +108,7 @@ const Navbar = () => {
                 <div>
                   {" "}
                   {user && (
-                    <Link className="relative inline-block w-[60px] h-[60px] p-2 mr-2">
+                    <div className="relative inline-block w-[60px] h-[60px] p-2 mr-2">
                       <img
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
@@ -121,7 +121,7 @@ const Navbar = () => {
                           {user.displayName}
                         </div>
                       )}
-                    </Link>
+                    </div>
                   )}
                 </div>
                 <label htmlFor="my-drawer-1" className="drawer-button">

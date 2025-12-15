@@ -1,157 +1,168 @@
 import React from "react";
-import Logo from "../assets/DashboardMainLogo.png";
-import { Link, Outlet } from "react-router";
-import { FaFileMedical, FaHome, FaUser, FaUsers } from "react-icons/fa";
+import { Link, Outlet, useLocation } from "react-router";
+import { FaFileMedical, FaUser, FaUsers } from "react-icons/fa";
 import { MdCreateNewFolder } from "react-icons/md";
 import { LuTally5 } from "react-icons/lu";
 import UseRole from "../AuthProvider/UseRole";
+
 const DashBoardLayout = () => {
   const { role } = UseRole();
+  const location = useLocation();
+  const isActive = (path) => location.pathname === path;
+
+  const closeDrawer = () => {
+    const checkbox = document.getElementById("my-drawer-4");
+    if (checkbox) {
+      checkbox.checked = false;
+    }
+  };
+
+  const renderMenuItem = (to, Icon, label, dataTip) => (
+    <li className="py-1">
+      <Link
+        to={to}
+        onClick={closeDrawer}
+        className={`flex items-center gap-3 p-3 text-base font-semibold rounded-lg transition-all duration-200 w-full whitespace-nowrap overflow-hidden ${
+          isActive(to)
+            ? "bg-primary text-white shadow-lg" 
+            : "text-gray-700 hover:bg-red-50/70 hover:text-primary" 
+        } lg:is-drawer-close:tooltip lg:is-drawer-close:tooltip-right`}
+        data-tip={dataTip}
+      >
+        <Icon className="w-5 h-5 flex-shrink-0" /> 
+        <span className="truncate"> 
+          {label}
+        </span>
+      </Link>
+    </li>
+  );
+
+  const dashboardTitle = (
+    <div className="px-3 text-2xl font-extrabold uppercase flex items-center">
+      <span className="text-primary mr-1 uppercase mr-2">{role}</span>
+      <span className="text-gray-800 font-normal">Dashboard</span> 
+    </div>
+  );
+
   return (
-    <div className="drawer lg:drawer-open">
+    <div className="drawer lg:drawer-open bg-gray-50 min-h-screen">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content">
-        {/* Navbar */}
-        <nav className="navbar w-full bg-base-300">
-          <label
-            htmlFor="my-drawer-4"
-            aria-label="open sidebar"
-            className="btn btn-square btn-ghost"
-          >
-            {/* Sidebar toggle icon */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              strokeLinejoin="round"
-              strokeLinecap="round"
-              strokeWidth="2"
-              fill="none"
-              stroke="currentColor"
-              className="my-1.5 inline-block size-4"
+      <div className="drawer-content flex flex-col">
+        <nav className="navbar w-full bg-white shadow-md p-0 h-16 sticky top-0 z-20">
+          <div className="flex-1">
+
+            <label
+              htmlFor="my-drawer-4"
+              aria-label="open sidebar"
+              className="btn btn-square btn-ghost lg:hidden ml-2" 
             >
-              <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"></path>
-              <path d="M9 4v16"></path>
-              <path d="M14 10l2 2l-2 2"></path>
-            </svg>
-          </label>
-          <div className="px-4 text-[20px] text-primary font-bold uppercase">
-            {role} <span className="ml-1 text-secondary">DashBoard</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                className="inline-block w-6 h-6 stroke-current"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                ></path>
+              </svg>
+            </label>
+          
+            {dashboardTitle}
+          </div>
+          <div className="flex-none">
           </div>
         </nav>
-        {/* Page content here */}
-        <div className="p-4">
-          <Outlet></Outlet>
-        </div>
+        
+        {/* Main Content Area */}
+        <main className="p-4 flex-grow">
+          <Outlet />
+        </main>
       </div>
 
-      <div className="drawer-side is-drawer-close:overflow-visible">
+      <div className="drawer-side z-30"> 
         <label
           htmlFor="my-drawer-4"
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <div className="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-18 is-drawer-open:w-64">
-          {/* Sidebar content here */}
-          <ul className="menu w-full grow">
-            {/* List item */}
-            <Link to={"/"}>
-              <li className="py-2 text-[20px]">
-                <button
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                  data-tip="BloodHive"
-                >
-                  {/* Home icon */}
-                  <img
-                    src="https://img.icons8.com/?size=48&id=26115&format=png"
-                    alt=""
-                  />
-                  <span className="is-drawer-close:hidden text-2xl font-bold text-secondary">
-                    BloodHive
-                  </span>
-                </button>
-              </li>
-            </Link>
+    
+        <div className="flex flex-col min-h-full bg-white text-gray-800 shadow-xl w-72"> 
+          
+      
+          <Link to={"/"} className="p-4 flex items-center justify-start border-b h-16">
+            <div className="flex items-center">
+              <img
+                src="https://img.icons8.com/?size=48&id=26115&format=png"
+                alt="BloodHive Logo"
+                className="w-8 h-8"
+              />
+              <span className="ml-2 text-2xl font-bold text-secondary">
+                BloodHive
+              </span>
+            </div>
+          </Link>
 
-            {/* List item */}
-            <li className="py-2 text-[20px]">
-              <Link
-                to={"/dashboard/Profile"}
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                data-tip="Profile"
-              >
-                <FaUser />
-                <span className="is-drawer-close:hidden">Profile</span>
-              </Link>
-            </li>
+    
+          <ul className="menu p-4 w-full grow space-y-2">
+            
+      
+            {renderMenuItem("/dashboard/Profile", FaUser, "Profile", "Profile")}
+
+       
             {role === "donor" && (
               <>
-                <li className="py-2 text-[20px]">
-                  <Link
-                    to={"/dashboard/My-donation-request"}
-                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="My Donetion"
-                  >
-                    <FaFileMedical />
-                    <span className="is-drawer-close:hidden">My Donetion</span>
-                  </Link>
-                </li>
-                <li className="py-2 text-[20px]">
-                  <Link
-                    to={"/dashboard/create-donation-request"}
-                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                    data-tip="Create Donetion"
-                  >
-                    <MdCreateNewFolder />
-                    <span className="is-drawer-close:hidden">
-                      Create Donetion
-                    </span>
-                  </Link>
-                </li>
+                {renderMenuItem(
+                  "/dashboard/My-donation-request",
+                  FaFileMedical,
+                  "My Donation Request",
+                  "My Donation"
+                )}
+                {renderMenuItem(
+                  "/dashboard/create-donation-request",
+                  MdCreateNewFolder,
+                  "Create Donation Request",
+                  "Create Donation"
+                )}
               </>
             )}
-            {role && role === "admin" && (
-              <li className="py-2 text-[20px]">
-                <Link
-                  to={"/dashboard/all-users"}
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                  data-tip="All Users"
-                >
-                  <FaUsers />
-                  <span className="is-drawer-close:hidden">All Users</span>
-                </Link>
-              </li>
-            )}
-            {role === "admin" ? (
-              <li className="py-2 text-[20px]">
-                <Link
-                  to={"/dashboard/all-blood-donation-request"}
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                  data-tip="All Blood Donation"
-                >
-                  <LuTally5 />
-                  <span className="is-drawer-close:hidden">
-                    All Blood Donation
-                  </span>
-                </Link>
-              </li>
-            ) : role === "volunteer" ? (
-              <li className="py-2 text-[20px]">
-                <Link
-                  to={"/dashboard/volunteerAllDonor"}
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                  data-tip="All Blood Donation"
-                >
-                  <LuTally5 />
-                  <span className="is-drawer-close:hidden">
-                    All Blood Donation
-                  </span>
-                </Link>
-              </li>
-            ) : (
-              ""
+
+            {role === "admin" && (
+              <>
+                {renderMenuItem(
+                  "/dashboard/all-users",
+                  FaUsers,
+                  "All Users",
+                  "All Users"
+                )}
+                {renderMenuItem(
+                  "/dashboard/all-blood-donation-request",
+                  LuTally5,
+                  "Blood Donation Requests",
+                  "All Blood Donation"
+                )}
+              </>
             )}
 
+        
+            {role === "volunteer" && (
+              <>
+                {renderMenuItem(
+                  "/dashboard/volunteerAllDonor",
+                  LuTally5,
+                  "Blood Donation Requests",
+                  "All Blood Donation"
+                )}
+              </>
+            )}
+            
           </ul>
+          <div className="p-4 border-t text-sm text-center text-gray-500">
+            © BloodHive
+          </div>
         </div>
       </div>
     </div>

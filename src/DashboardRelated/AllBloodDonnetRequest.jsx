@@ -5,7 +5,14 @@ import UseAxiosSecure from "../AuthProvider/UseAxiosSecure";
 import { FaRegEye } from "react-icons/fa";
 import { Link } from "react-router";
 import Loading from "../Loading/Loading";
+import { format, parse } from "date-fns";
 
+const formatDateTime = (dateStr, timeStr) => {
+  if (!dateStr || !timeStr) return "N/A";
+  const combinedStr = `${dateStr} ${timeStr}`;
+  const dateObj = parse(combinedStr, "yyyy-MM-dd HH:mm", new Date());
+  return format(dateObj, "dd MMM, yyyy | hh:mm a");
+};
 const AllBloodDonnetRequest = () => {
   const { user } = UseAuth();
   const axiosSecure = UseAxiosSecure();
@@ -36,8 +43,7 @@ const AllBloodDonnetRequest = () => {
                 <th>#</th>
                 <th>Recipient Name</th>
                 <th>Location</th>
-                <th>Date</th>
-                <th>Time</th>
+                <th>Date & Time</th>
                 <th>Blood Group</th>
                 <th>Status</th>
                 <th>Actions</th>
@@ -52,8 +58,14 @@ const AllBloodDonnetRequest = () => {
                     <td>
                       {donner.recipentDistrict},{donner.recipientUpazila}
                     </td>
-                    <td>{donner.donetionDate}</td>
-                    <td>{donner.donetionTime}</td>
+                    <td>
+                      {" "}
+                      {formatDateTime(
+                        donner.donetionDate,
+                        donner.donetionTime
+                      )}{" "}
+                    </td>
+
                     <td>{donner.Blood}</td>
                     <td className={`text-red-600 font-bold`}>
                       {donner.status}
