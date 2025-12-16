@@ -1,8 +1,7 @@
 import React from "react";
 import { Link, Outlet, useLocation } from "react-router";
-import { FaFileMedical, FaTint, FaUser, FaUsers } from "react-icons/fa";
+import {  FaTint, FaUser, FaUsers } from "react-icons/fa";
 import { MdCreateNewFolder } from "react-icons/md";
-import { LuTally5 } from "react-icons/lu";
 import UseRole from "../AuthProvider/UseRole";
 
 const DashBoardLayout = () => {
