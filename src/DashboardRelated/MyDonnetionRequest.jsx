@@ -557,7 +557,7 @@ const MyDonnetionRequest = () => {
             </form>{" "}
           </div>{" "}
         </div>{" "}
-      </dialog>{" "}
+      </dialog>
     </div>
   );
 };
