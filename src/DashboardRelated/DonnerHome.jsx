@@ -703,13 +703,9 @@ const DonnerHome = () => {
                 <FaTint />
               </div>
               <div className="stat-title">Total Donnations</div>
-              <div className="stat-value text-red-600">{totalDonnation}</div>
+              <div className="stat-value text-red-600">{totalDonnation}+</div>
             </div>
           </div>
-          <p className="mt-6 text-gray-500">
-            *As a **{role?.toUpperCase() || "General User"}**, your dashboard
-            provides a high-level summary of system activity.
-          </p>
         </div>
       )}
     </div>
