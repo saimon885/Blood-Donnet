@@ -1,5 +1,66 @@
-<h1>--Project Name : BloodHive</h1>
-<p>--Purpose : The main purpose of the projector at BloodHive is to manage blood for donors very quickly.</p>
-<h2>--Live URL : https://blood-donnet.netlify.app/</h2>
-<p>--npm packages : Vite,react,tailwind css, daisy UI, firebase, react Router,toastify,sweetalert2,date fns, aos, swiper ,axios,react-simple-typewriter,react hook form, react Icons</p>
-<p>--key features : ....This project is basically a blood donation system project. Here there are admin volunteers and donors. There are separate sections for admin, separate sections for volunteers and separate sections for donors. Here the donor cannot access the admin section even if he wants, similarly the admin cannot access the donor or volunteer section even if he wants. Here the donor can create requests as per his need, can view, delete, update. If the volunteer wants, he can update the request data of all those donors in various ways. Here the admin can see the list of all donors but no one else can see it. From there, if the admin wants a new donor, he can make him a volunteer or admin. Then here there will be a route called request in the number, all the pending data there can be seen whether the donor is logged in or not. From there, if he wants, he can accept and change the status of that dollar to in progress. In the funding section, any admin donor or volunteer can donate there, but he must be logged in, then he can donate as much as he wants. There is another section here, which is Find Donor, where anyone can select blood group, district, upazila and find a donor. These were the features of the brief project.</p>
+# 🩸 BloodHive – Fast & Efficient Blood Donation Management System
+
+🔗 **Live URL:** [https://blood-donnet.netlify.app/](https://blood-donnet.netlify.app/)
+
+BloodHive is a **comprehensive blood donation system** designed to manage donors, volunteers, and admin activities efficiently. The system ensures proper role-based access and smooth handling of blood requests and donations.
+
+---
+
+## 🚀 Key Features
+
+- 🧑‍💻 **Role-Based Access**
+  - Admin, Volunteer, and Donor have separate sections.
+  - Donors cannot access admin or volunteer areas.
+  - Admin cannot access donor or volunteer sections.
+
+- 🩸 **Donor Management**
+  - Donors can **create, view, update, and delete requests**.
+  - Volunteers can update donor request data in multiple ways.
+  - Admin can view the full list of donors and assign roles (volunteer/admin).
+
+- ⏳ **Request Tracking**
+  - All pending requests are visible in the **Requests section**.
+  - Requests can be updated to **In Progress** status.
+
+- 💰 **Funding & Donations**
+  - Logged-in users (Admin, Donor, Volunteer) can donate any amount.
+
+- 🔍 **Find Donor**
+  - Search donors by **blood group, district, and upazila**.
+
+- 🔒 **Secure & Efficient**
+  - Firebase authentication ensures proper access control.
+
+---
+
+## 🛠 Technologies & Tools
+
+- **Frontend:** React, Tailwind CSS, DaisyUI, React Router  
+- **State & Forms:** React Hook Form, Axios, Toastify  
+- **UI & Animation:** Swiper, AOS, React Simple Typewriter, SweetAlert2  
+- **Backend & Database:** Firebase  
+- **Bundler:** Vite  
+- **Icons:** React Icons  
+- **Date Management:** date-fns  
+
+---
+
+## 🖼 Screenshots
+
+*(Add screenshots of Home, Requests, Donor List, Find Donor pages here)*
+
+---
+
+## 📦 Installation & Setup
+
+```bash
+# Clone the repo
+git clone https://github.com/your-username/bloodhive.git
+cd bloodhive
+
+# Install dependencies
+npm install
+
+# Run locally
+npm run dev
+
