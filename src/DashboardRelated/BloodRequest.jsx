@@ -13,8 +13,7 @@ const BloodRequest = () => {
       .then((res) => res.json())
       .then((data) => {
         setAllUpazila(data);
-      })
-     
+      });
   }, []);
 
   const DistrictData = useLoaderData();
@@ -35,7 +34,7 @@ const BloodRequest = () => {
 
     if (targetDistrictId && allUpazila.length > 0) {
       const upazilas = allUpazila.filter(
-        (u) => u.district_id === targetDistrictId
+        (u) => u.district_id === targetDistrictId,
       );
       return upazilas.map((u) => u.name);
     }
@@ -72,9 +71,9 @@ const BloodRequest = () => {
 
   return (
     <div>
-      <div className="min-h-xl bg-gray-50 flex flex-col items-center p-4 sm:p-6 lg:p-8">
+      <div className="min-h-xl  flex flex-col items-center p-4 sm:p-6 lg:p-8">
         {" "}
-        <div className="w-full max-w-xl bg-white p-8 rounded-xl border border-red-100 mb-8">
+        <div className="w-full max-w-xl  p-8 rounded-xl border border-red-100 mb-8">
           {" "}
           <h1 className="text-4xl font-extrabold text-center text-red-600 mb-8 tracking-tight">
             🩸 Find Blood Donors{" "}
@@ -86,7 +85,7 @@ const BloodRequest = () => {
             <div>
               <label
                 htmlFor="Blood"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-accent mb-1"
               >
                 Select Blood Group{" "}
               </label>{" "}
@@ -94,7 +93,7 @@ const BloodRequest = () => {
                 {...register("Blood", { required: true })}
                 defaultValue={""}
                 id="Blood"
-                className="select select-bordered w-full bg-white transition duration-150 ease-in-out focus:ring-red-500 focus:border-red-500"
+                className="select select-bordered w-full transition duration-150 ease-in-out focus:ring-red-500 focus:border-red-500"
               >
                 {" "}
                 <option value="" disabled>
@@ -114,7 +113,7 @@ const BloodRequest = () => {
               {" "}
               <label
                 htmlFor="recipentDistrict"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-accent  mb-1"
               >
                 Select District
               </label>{" "}
@@ -122,7 +121,7 @@ const BloodRequest = () => {
                 {...register("recipentDistrict", { required: true })}
                 defaultValue={""}
                 id="recipentDistrict"
-                className="select select-bordered w-full bg-white transition duration-150 ease-in-out focus:ring-red-500 focus:border-red-500"
+                className="select select-bordered w-full transition duration-150 ease-in-out focus:ring-red-500 focus:border-red-500"
               >
                 {" "}
                 <option value="" disabled>
@@ -139,7 +138,7 @@ const BloodRequest = () => {
               {" "}
               <label
                 htmlFor="recipientUpazila"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-accent mb-1"
               >
                 Select Upazila
               </label>{" "}
@@ -147,7 +146,7 @@ const BloodRequest = () => {
                 {...register("recipientUpazila", { required: true })}
                 defaultValue={""}
                 id="recipientUpazila"
-                className={`select select-bordered w-full bg-white transition duration-150 ease-in-out focus:ring-red-500 focus:border-red-500`}
+                className={`select select-bordered w-full transition duration-150 ease-in-out focus:ring-red-500 focus:border-red-500`}
               >
                 {" "}
                 <option value="" disabled>
@@ -155,8 +154,8 @@ const BloodRequest = () => {
                   {allUpazila.length === 0
                     ? "Loading Upazilas..."
                     : selectedDistrictName
-                    ? "Pick a Upazila"
-                    : "Select a District first"}{" "}
+                      ? "Pick a Upazila"
+                      : "Select a District first"}{" "}
                 </option>{" "}
                 {getUpazilasByDistrictName(selectedDistrictName).map((u, i) => (
                   <option key={i} value={u}>
@@ -178,7 +177,7 @@ const BloodRequest = () => {
       </div>
       <div className="mx-5">
         <div className="w-full mt-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+          <h2 className="text-2xl font-bold  mb-4 text-center">
             {" "}
             {filteredDonors.length > 0
               ? `Found ${filteredDonors.length} Donor(s)`
@@ -189,31 +188,29 @@ const BloodRequest = () => {
             {filteredDonors.map((donor, index) => (
               <div
                 key={index}
-                className="bg-white p-6 rounded-lg shadow-md border border-red-200 hover:shadow-xl transition duration-300"
+                className=" p-6 rounded-lg shadow-md border border-red-200 hover:shadow-xl transition duration-300"
               >
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-xl font-extrabold text-red-600">
                     {donor.bloodGroup || "Group N/A"}{" "}
                   </span>
-                  <span className="text-sm font-semibold text-gray-600 text-right">
+                  <span className="text-sm font-semibold  text-right">
                     {donor.district || "District N/A"},
                     {donor.upazila || "Upazila N/A"}{" "}
                   </span>{" "}
                 </div>{" "}
-                <p className="text-lg font-medium text-gray-900">
+                <p className="text-lg font-medium ">
                   {donor.displayName || "N/A"}
                 </p>
-                <p className="text-gray-600">
-                  Contact: {donor.contactNumber || "N/A"}
-                </p>
-                <button className="mt-3 btn btn-sm bg-red-500 text-white hover:bg-red-600">
+                <p className="">Contact: {donor.contactNumber || "N/A"}</p>
+                <button className="mt-3 btn btn-sm bg-red-500  hover:bg-red-600">
                   Request Contact
                 </button>
               </div>
             ))}{" "}
           </div>
           {filteredDonors.length === 0 && (
-            <div className="text-center text-gray-500 p-10 bg-white rounded-lg shadow-md">
+            <div className="text-center text-gray-500 p-10  rounded-lg shadow-md">
               <p className="text-lg font-semibold">
                 🔍 Please search to find available blood donors.
               </p>

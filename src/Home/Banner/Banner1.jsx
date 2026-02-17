@@ -19,7 +19,7 @@ const Banner1 = () => {
     });
   }, []);
   return (
-    <div className="bg-secondary ">
+    <div className="bg-[#7f0000]">
       <div className="flex flex-col md:flex-row justify-between items-center gap-10 mx-10 py-20 ">
         <div data-aos="fade-right" className="text-center space-y-5 text-white">
           <h1 className="text-3xl md:text-4xl font-bold text-white">

@@ -51,9 +51,9 @@ const Funding = () => {
   if (isLoading) return <Loading></Loading>
 
   return (
-    <div className="p-4 sm:p-6 bg-gray-50 rounded-xl">
+    <div className="p-4 sm:p-6  rounded-xl">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
-        <h1 className="text-3xl font-extrabold text-gray-900 flex items-center gap-2">
+        <h1 className="text-3xl font-extrabold  flex items-center gap-2">
           <FaSackDollar className="text-primary-500" /> Fund History &
           Contribution
         </h1>
@@ -72,7 +72,7 @@ const Funding = () => {
               value={customFundAmount || ""}
               onChange={(e) => setCustomFundAmount(e.target.value)}
               placeholder="Amount"
-              className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150"
+              className="w-full pl-8 text-black bg-white pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-150"
             />
           </div>
 
@@ -88,7 +88,7 @@ const Funding = () => {
         </div>
       </div>
 
-      <h2 className="text-xl font-semibold text-gray-700 mb-4">
+      <h2 className="text-xl font-semibold text-accent mb-4">
         Recent Contributions
       </h2>
 
@@ -112,23 +112,23 @@ const Funding = () => {
             </tr>
           </thead>
 
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className=" divide-y divide-gray-200">
             {data && data.length > 0 ? (
               data.map((item, index) => (
                 <tr
                   key={item._id}
                   className="hover:bg-blue-50/50 transition duration-100"
                 >
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm ">
                     {index + 1}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-800">
+                  <td className="px-6 py-4 whitespace-nowrap font-medium ">
                     {item.funderName || "Anonymous"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-bold">
                     $ {parseFloat(item.amount).toFixed(2)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm ">
                     {formatUtcDate(item.paidAt)}
                   </td>
                 </tr>

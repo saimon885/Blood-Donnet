@@ -21,7 +21,7 @@ const BloodHiveWorks = () => {
         How {text}
       </h1>
       <div className="flex flex-col md:flex-row justify-between gap-8 items-center mt-5">
-        <div className="text-center mx-auto transition-all duration-300 hover:-translate-y-2 bg-white shadow-xl p-9 space-y-3 rounded-2xl ">
+        <div className="text-center mx-auto transition-all duration-300 hover:-translate-y-2  shadow-xl p-9 space-y-3 rounded-2xl ">
           <img
             className="mx-auto w-[40px]"
             src="https://cdn-icons-png.flaticon.com/128/16000/16000109.png"
@@ -33,7 +33,7 @@ const BloodHiveWorks = () => {
             community. Verify your details securely.
           </p>
         </div>
-        <div className="text-center mx-auto transition-all duration-300 hover:-translate-y-2 bg-white shadow-xl p-9 space-y-3 rounded-2xl ">
+        <div className="text-center mx-auto transition-all duration-300 hover:-translate-y-2  shadow-xl p-9 space-y-3 rounded-2xl ">
           <img
             className="mx-auto w-[40px]"
             src="https://cdn-icons-png.flaticon.com/128/893/893529.png"
@@ -45,7 +45,7 @@ const BloodHiveWorks = () => {
             Schedule appointments easily.
           </p>
         </div>
-        <div className="text-center mx-auto transition-all duration-300 hover:-translate-y-2 bg-white shadow-xl p-9 space-y-3 rounded-2xl ">
+        <div className="text-center mx-auto transition-all duration-300 hover:-translate-y-2  shadow-xl p-9 space-y-3 rounded-2xl ">
           <img
             className="mx-auto w-[40px]"
             src="https://cdn-icons-png.flaticon.com/128/17587/17587007.png"

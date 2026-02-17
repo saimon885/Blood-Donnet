@@ -2,16 +2,23 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useRef, useState } from "react";
 import UseAuth from "../AuthProvider/UseAuth";
 import UseAxiosSecure from "../AuthProvider/UseAxiosSecure";
-import { FaRegEye } from "react-icons/fa";
-import { MdModeEdit } from "react-icons/md";
-import { ImBin2 } from "react-icons/im";
+import {
+  FaRegEye,
+  FaMapMarkerAlt,
+  FaClock,
+  FaTint,
+  FaTrashAlt,
+  FaEdit,
+} from "react-icons/fa";
 import { useForm, useWatch } from "react-hook-form";
 import { useLoaderData } from "react-router";
 import Swal from "sweetalert2";
 import Loading from "../Loading/Loading";
 import { format, parse } from "date-fns";
+
 const formatDateTime = (dateStr, timeStr) => {
   if (!dateStr || !timeStr) return "N/A";
+
   const combinedStr = `${dateStr} ${timeStr}`;
   const dateObj = parse(combinedStr, "yyyy-MM-dd HH:mm", new Date());
   return format(dateObj, "dd MMM, yyyy | hh:mm a");
@@ -20,11 +27,12 @@ const formatDateTime = (dateStr, timeStr) => {
 const Alldonor = () => {
   const { user } = UseAuth();
   const { register, handleSubmit, control, reset } = useForm();
-  const [donnerDetails, setDonnerDetails] = useState([]);
-  const [donnerupdate, setDonnerUpdate] = useState([]);
+  const [donnerDetails, setDonnerDetails] = useState(null);
+  const [donnerupdate, setDonnerUpdate] = useState(null);
   const viewModalRef = useRef(null);
   const UpdateModalRef = useRef(null);
   const axiosSecure = UseAxiosSecure();
+
   const {
     data: donners = [],
     refetch,
@@ -41,14 +49,12 @@ const Alldonor = () => {
   useEffect(() => {
     fetch("/upazila.json")
       .then((res) => res.json())
-      .then((data) => {
-        setAllUpazila(data);
-      });
+      .then((data) => setAllUpazila(data))
+      .catch((err) => console.error("Upazila loading error:", err));
   }, []);
 
-  const DistrictData = useLoaderData();
-  const DistrictDuplicate = DistrictData.map((c) => c.name);
-
+  const DistrictData = useLoaderData() || [];
+  const DistrictDuplicate = DistrictData?.map((c) => c.name) || [];
   const selectedDistrictName = useWatch({ control, name: "recipentDistrict" });
 
   const getDistrictIdByName = (districtName) => {
@@ -58,25 +64,23 @@ const Alldonor = () => {
 
   const getUpazilasByDistrictName = (districtName) => {
     const targetDistrictId = getDistrictIdByName(districtName);
-
     if (targetDistrictId && allUpazila.length > 0) {
-      const upazilas = allUpazila.filter(
-        (u) => u.district_id === targetDistrictId
-      );
-      return upazilas.map((u) => u.name);
+      return allUpazila
+        .filter((u) => u.district_id === targetDistrictId)
+        .map((u) => u.name);
     }
     return [];
   };
 
   const handleViews = (data) => {
-    viewModalRef.current.showModal();
     setDonnerDetails(data);
+    viewModalRef.current.showModal();
   };
 
   const handleEditDonnetion = (data) => {
-    UpdateModalRef.current.showModal();
     setDonnerUpdate(data);
-    reset(data);
+    reset({ ...data, id: data._id });
+    UpdateModalRef.current.showModal();
   };
 
   const handleUpdateDonner = (data) => {
@@ -93,12 +97,11 @@ const Alldonor = () => {
     };
 
     axiosSecure.patch(`/donners/${data.id}`, allInfo).then((res) => {
-      if (res.data.modifiedCount) {
+      if (res.data.modifiedCount > 0) {
         UpdateModalRef.current.close();
         Swal.fire({
-          position: "top-end",
           icon: "success",
-          title: "Donnetion Has been Updated",
+          title: "Updated successfully",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -106,412 +109,375 @@ const Alldonor = () => {
       }
     });
   };
+
   const handleDelete = (id) => {
     Swal.fire({
-      title: "Are you sure you want to delete?",
+      title: "Are you sure?",
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
         axiosSecure.delete(`/donners/${id}`).then((res) => {
-          if (res.data.deletedCount) {
+          if (res.data.deletedCount > 0) {
             refetch();
-            Swal.fire({
-              title: "Deleted!",
-              text: "Your Donnetions has been deleted.",
-              icon: "success",
-            });
+            Swal.fire(
+              "Deleted!",
+              "Donation request has been deleted.",
+              "success",
+            );
           }
         });
       }
     });
   };
-  if (isLoading) return <Loading></Loading>;
+
+  const getStatusClass = (status) => {
+    switch (status?.toLowerCase()) {
+      case "completed":
+      case "done":
+        return "badge badge-success text-white";
+      case "in-progress":
+        return "badge badge-warning text-white";
+      default:
+        return "badge badge-error text-white";
+    }
+  };
+
+  if (isLoading) return <Loading />;
+
   return (
-    <div>
-      <div>
-        <div>
-          <div className="overflow-x-auto rounded-xl shadow-lg">
-            {" "}
-            <table className="table min-w-full">
-              {/* head */}{" "}
-              <thead className="bg-red-700 text-white">
-                {" "}
-                <tr>
-                  <th className="py-3 px-4">#</th>
-                  <th className="py-3 px-4">Recipient Name</th>
-                  <th className="py-3 px-4">Location</th>{" "}
-                  <th className="py-3 px-4">Date & Time</th>{" "}
-                  <th className="py-3 px-4">Blood Group</th>{" "}
-                  <th className="py-3 px-4">Status</th>{" "}
-                  <th className="py-3 px-4 text-center">Actions</th>{" "}
-                </tr>{" "}
-              </thead>{" "}
-              <tbody>
-                {" "}
-                {donners.map((donner, index) => (
-                  <tr key={donner._id} className="border-b hover:bg-gray-50">
-                    {" "}
-                    <th className="px-4 py-3">{index + 1}</th>{" "}
-                    <td className="px-4 py-3 font-medium text-gray-700">
-                      {donner.recipientName}
-                    </td>{" "}
-                    <td className="px-4 py-3 text-sm">
-                      {donner.recipentDistrict}, {donner.recipientUpazila}{" "}
-                    </td>
-                    <td className="px-4 py-3 font-semibold whitespace-nowrap text-blue-600">
-                      {" "}
-                      {formatDateTime(
-                        donner.donetionDate,
-                        donner.donetionTime
-                      )}{" "}
-                    </td>{" "}
-                    <td className="px-4 py-3 font-bold">{donner.Blood}</td>{" "}
-                    <td
-                      className={`px-4 py-3 font-bold uppercase ${
-                        donner.status === "completed"
-                          ? "text-green-600"
-                          : donner.status === "Done"
-                          ? "text-green-600"
-                          : "text-red-600"
-                      }`}
-                    >
-                      {donner.status}{" "}
-                    </td>{" "}
-                    <td className="flex items-center justify-center gap-2 px-4 py-3 whitespace-nowrap">
-                      {" "}
+    <div className="p-4 md:p-8 bg-gray-50 min-h-screen">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-2xl font-bold mb-6 text-gray-800 border-l-4 border-red-600 pl-3">
+          Blood Donation Management
+        </h2>
+
+        {/* Desktop Table View */}
+        <div className="hidden lg:block overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-200">
+          <table className="table w-full">
+            <thead className="bg-red-700 text-white">
+              <tr>
+                <th className="py-4">#</th>
+                <th>Recipient Name</th>
+                <th>Location</th>
+                <th>Date & Time</th>
+                <th>Blood Group</th>
+                <th>Status</th>
+                <th className="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {donners.map((donner, index) => (
+                <tr
+                  key={donner._id}
+                  className="hover:bg-gray-50 bg-white text-black transition-colors"
+                >
+                  <th>{index + 1}</th>
+                  <td className="font-medium">{donner.recipientName}</td>
+                  <td className="text-sm">
+                    {donner.recipentDistrict}, {donner.recipientUpazila}
+                  </td>
+                  <td className="text-sm font-semibold text-blue-600">
+                    {formatDateTime(donner.donetionDate, donner.donetionTime)}
+                  </td>
+                  <td>
+                    <span className="px-3 py-1 bg-red-100 text-red-600 rounded-full font-bold uppercase">
+                      {donner.Blood}
+                    </span>
+                  </td>
+                  <td>
+                    <span className={getStatusClass(donner.status)}>
+                      {donner.status}
+                    </span>
+                  </td>
+                  <td>
+                    <div className="flex justify-center gap-2">
                       <button
                         onClick={() => handleViews(donner)}
-                        className="btn btn-sm bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg"
-                        title="View Details"
+                        className="btn btn-square btn-sm btn-info text-white"
+                        title="View"
                       >
-                        <FaRegEye />{" "}
-                      </button>{" "}
+                        <FaRegEye />
+                      </button>
                       <button
                         onClick={() => handleEditDonnetion(donner)}
-                        className="btn btn-sm bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded-lg"
-                        title="Edit Request"
+                        className="btn btn-square btn-sm btn-warning text-white"
+                        title="Edit"
                       >
-                        <MdModeEdit />{" "}
-                      </button>{" "}
+                        <FaEdit />
+                      </button>
                       <button
                         onClick={() => handleDelete(donner._id)}
-                        className="btn btn-sm bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg"
-                        title="Delete Request"
+                        className="btn btn-square btn-sm btn-error text-white"
+                        title="Delete"
                       >
-                        <ImBin2 />{" "}
-                      </button>{" "}
-                    </td>{" "}
-                  </tr>
-                ))}{" "}
-              </tbody>{" "}
-            </table>{" "}
-          </div>{" "}
+                        <FaTrashAlt />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Mobile Card View */}
+        <div className="lg:hidden grid grid-cols-1 gap-4">
+          {donners.map((donner) => (
+            <div
+              key={donner._id}
+              className="card bg-white text-black shadow-sm border border-gray-100 border-l-4 border-red-600"
+            >
+              <div className="card-body p-5">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="font-bold text-lg">
+                      {donner.recipientName}
+                    </h3>
+                    <div className="flex items-center gap-2 text-gray-500 text-sm mt-1">
+                      <FaMapMarkerAlt className="text-red-500" />
+                      {donner.recipentDistrict}, {donner.recipientUpazila}
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-end gap-2">
+                    <span className="text-xl font-black text-red-600 flex items-center gap-1">
+                      <FaTint className="text-sm" /> {donner.Blood}
+                    </span>
+                    <span className={getStatusClass(donner.status)}>
+                      {donner.status}
+                    </span>
+                  </div>
+                </div>
+                <div className="divider my-2"></div>
+                <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
+                  <FaClock className="text-blue-500" />
+                  {formatDateTime(donner.donetionDate, donner.donetionTime)}
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  <button
+                    onClick={() => handleViews(donner)}
+                    className="btn btn-sm btn-info text-white"
+                  >
+                    <FaRegEye /> View
+                  </button>
+                  <button
+                    onClick={() => handleEditDonnetion(donner)}
+                    className="btn btn-sm btn-warning text-white"
+                  >
+                    <FaEdit /> Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(donner._id)}
+                    className="btn btn-sm btn-error text-white"
+                  >
+                    <FaTrashAlt /> Del
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
+
+      {/* View Details Modal */}
       <dialog ref={viewModalRef} className="modal modal-bottom sm:modal-middle">
-        {" "}
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Donnetion Details</h3>{" "}
-          <div className="py-4">
-            {" "}
-            <div>
-              {" "}
-              <div className=" rounded-box border border-base-content/5 bg-base-100 shadow-xl">
-                {" "}
-                <div className="bg-red-700 text-white p-3 rounded-t-lg">
-                  {" "}
-                  <h2 className="text-lg font-bold">
-                    Donation Request Information
-                  </h2>{" "}
-                </div>{" "}
-                <div className="p-4 space-y-2">
-                  <div className="flex gap-5 items-center text-sm">
-                    {" "}
-                    <span className="font-semibold">Requester Name :</span>{" "}
-                    <span className="text-right">
-                      {donnerDetails.requesterName}{" "}
-                    </span>{" "}
-                  </div>{" "}
-                  <div className="flex gap-5 items-center text-sm">
-                    {" "}
-                    <span className="font-semibold">
-                      Requester Email :
-                    </span>{" "}
-                    <span className="text-right">
-                      {donnerDetails.requesterEmail}{" "}
-                    </span>{" "}
-                  </div>{" "}
-                  <div className="flex gap-5 items-center text-sm">
-                    {" "}
-                    <span className="font-semibold">Recipient Name :</span>{" "}
-                    <span className="text-right">
-                      {donnerDetails.recipientName}{" "}
-                    </span>{" "}
-                  </div>{" "}
-                  <div className="flex gap-5 items-center text-sm">
-                    {" "}
-                    <span className="font-semibold">Location :</span>{" "}
-                    <span className="text-right">
-                      {donnerDetails.recipentDistrict},
-                      {donnerDetails.recipientUpazila}{" "}
-                    </span>{" "}
-                  </div>{" "}
-                  <div className="flex gap-5 items-center text-sm">
-                    {" "}
-                    <span className="font-semibold">Blood Group :</span>{" "}
-                    <span className="text-right">{donnerDetails.Blood}</span>{" "}
-                  </div>{" "}
-                  <div className="flex gap-5 items-center text-sm">
-                    {" "}
-                    <span className="font-semibold">HospitalName :</span>{" "}
-                    <span className="text-right">
-                      {donnerDetails.hospitalName}{" "}
-                    </span>{" "}
-                  </div>{" "}
-                  <div className="flex gap-5 items-center text-sm">
-                    {" "}
-                    <span className="font-semibold">Address :</span>{" "}
-                    <span className="text-right">{donnerDetails.address}</span>{" "}
-                  </div>{" "}
-                  <div className="flex gap-5 items-center text-sm font-bold text-blue-600">
-                    {" "}
-                    <span className="font-semibold text-gray-800">
-                      Donnetion Time And Date{" "}
-                    </span>{" "}
-                    <span className="text-right">
-                      {formatDateTime(
-                        donnerDetails.donetionDate,
-                        donnerDetails.donetionTime
-                      )}{" "}
-                    </span>{" "}
-                  </div>{" "}
-                  <div className="flex gap-5 items-center text-sm">
-                    {" "}
-                    <span className="font-semibold">
-                      Request Message :
-                    </span>{" "}
-                    <span className="text-right">
-                      {donnerDetails.requestMessage}{" "}
-                    </span>{" "}
-                  </div>{" "}
-                </div>{" "}
-              </div>{" "}
-            </div>{" "}
-          </div>{" "}
-          <div className="modal-action">
-            {" "}
+        <div className="modal-box p-0">
+          <div className="bg-red-700 text-white p-4 flex justify-between items-center">
+            <h3 className="font-bold text-lg">Donation Details</h3>
             <form method="dialog">
-              <button className="btn">Close</button>{" "}
-            </form>{" "}
-          </div>{" "}
-        </div>{" "}
+              <button className="btn btn-sm btn-circle btn-ghost">✕</button>
+            </form>
+          </div>
+          <div className="p-6 space-y-3">
+            <div className="grid grid-cols-2 gap-y-3 text-sm">
+              <span className="font-bold">Requester:</span>{" "}
+              <span>{donnerDetails?.requesterName}</span>
+              <span className="font-bold">Email:</span>{" "}
+              <span className="break-all">{donnerDetails?.requesterEmail}</span>
+              <span className="font-bold">Recipient:</span>{" "}
+              <span>{donnerDetails?.recipientName}</span>
+              <span className="font-bold">Location:</span>{" "}
+              <span>
+                {donnerDetails?.recipentDistrict},{" "}
+                {donnerDetails?.recipientUpazila}
+              </span>
+              <span className="font-bold">Hospital:</span>{" "}
+              <span>{donnerDetails?.hospitalName}</span>
+              <span className="font-bold">Blood Group:</span>{" "}
+              <span className="text-red-600 font-bold">
+                {donnerDetails?.Blood}
+              </span>
+              <span className="font-bold">Date & Time:</span>{" "}
+              <span className="text-blue-600">
+                {formatDateTime(
+                  donnerDetails?.donetionDate,
+                  donnerDetails?.donetionTime,
+                )}
+              </span>
+            </div>
+            <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+              <p className="font-bold text-xs uppercase text-gray-400 mb-1">
+                Request Message
+              </p>
+              <p className="text-gray-700 italic">
+                "{donnerDetails?.requestMessage || "No message provided"}"
+              </p>
+            </div>
+          </div>
+          <div className="modal-action p-4">
+            <form method="dialog">
+              <button className="btn">Close</button>
+            </form>
+          </div>
+        </div>
       </dialog>
+
+      {/* Update Modal */}
       <dialog
         ref={UpdateModalRef}
         className="modal modal-bottom sm:modal-middle"
       >
-        {" "}
-        <div className="modal-box">
-          {" "}
-          <h3 className="font-bold text-lg text-secondary">
-            Update Donnetion!!{" "}
-          </h3>{" "}
-          <div className="py-4">
-            {" "}
-            <form onSubmit={handleSubmit(handleUpdateDonner)}>
-              {" "}
-              <fieldset className="fieldset">
-                {" "}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
-                  {" "}
-                  {/* Made responsive */}{" "}
-                  <div>
-                    <fieldset>
-                      {" "}
-                      <legend className="fieldset-legend">
-                        Requster Name
-                      </legend>{" "}
-                      <input
-                        type="text"
-                        {...register("requesterName")}
-                        className="input input-bordered w-full"
-                        readOnly
-                      />{" "}
-                    </fieldset>{" "}
-                    <fieldset className="hidden">
-                      {" "}
-                      <legend className="fieldset-legend">Id</legend>{" "}
-                      <input
-                        type="text"
-                        {...register("id")}
-                        className="input input-bordered w-full"
-                        defaultValue={donnerupdate._id}
-                        readOnly
-                      />{" "}
-                    </fieldset>{" "}
-                    <fieldset>
-                      {" "}
-                      <legend className="fieldset-legend">
-                        Requester Email{" "}
-                      </legend>{" "}
-                      <input
-                        type="email"
-                        {...register("requesterEmail")}
-                        readOnly
-                        className="input input-bordered w-full"
-                      />{" "}
-                    </fieldset>{" "}
-                    <fieldset className="fieldset">
-                      {" "}
-                      <legend className="fieldset-legend">
-                        Blood Group
-                      </legend>{" "}
-                      <select
-                        {...register("Blood")}
-                        className="select select-bordered w-full"
-                      >
-                        {" "}
-                        <option disabled={true} value={""}>
-                          Pick a Group{" "}
-                        </option>
-                        <option>A+</option>
-                        <option>A-</option> <option>B+</option>{" "}
-                        <option>B-</option> <option>O+</option>{" "}
-                        <option>O-</option> <option>AB+</option>{" "}
-                        <option>AB-</option>{" "}
-                      </select>{" "}
-                    </fieldset>{" "}
-                    <fieldset>
-                      {" "}
-                      <legend className="fieldset-legend">
-                        Donation date
-                      </legend>{" "}
-                      <input
-                        type="date"
-                        {...register("donetionDate")}
-                        className="input input-bordered w-full"
-                        placeholder="Enter Date"
-                      />{" "}
-                    </fieldset>{" "}
-                    <fieldset>
-                      {" "}
-                      <legend className="fieldset-legend">
-                        Donation Time
-                      </legend>{" "}
-                      <input
-                        type="time"
-                        {...register("donetionTime")}
-                        className="input input-bordered w-full"
-                        placeholder="Enter Donation Time"
-                      />{" "}
-                    </fieldset>{" "}
-                    <fieldset>
-                      {" "}
-                      <legend className="fieldset-legend">
-                        Request message{" "}
-                      </legend>{" "}
-                      <textarea
-                        {...register("requestMessage")}
-                        className="textarea textarea-bordered w-full h-15"
-                        placeholder="Enter Request message"
-                      ></textarea>{" "}
-                    </fieldset>{" "}
-                  </div>{" "}
-                  <div>
-                    {" "}
-                    <fieldset>
-                      {" "}
-                      <legend className="fieldset-legend">
-                        Recipient name{" "}
-                      </legend>{" "}
-                      <input
-                        type="text"
-                        {...register("recipientName")}
-                        className="input input-bordered w-full"
-                        placeholder="Recipient name"
-                      />{" "}
-                    </fieldset>{" "}
-                    <fieldset className="fieldset w-full">
-                      {" "}
-                      <legend className="fieldset-legend">District</legend>{" "}
-                      <select
-                        {...register("recipentDistrict")}
-                        className="select select-bordered w-full"
-                      >
-                        {" "}
-                        <option disabled={true}>Pick a District</option>{" "}
-                        {DistrictDuplicate.map((d, i) => (
-                          <option value={d} key={i}>
-                            {d}{" "}
-                          </option>
-                        ))}{" "}
-                      </select>{" "}
-                    </fieldset>{" "}
-                    <fieldset className="fieldset w-full">
-                      {" "}
-                      <legend className="fieldset-legend">Upazila</legend>{" "}
-                      <select
-                        {...register("recipientUpazila")}
-                        className="select select-bordered w-full"
-                      >
-                        {" "}
-                        {getUpazilasByDistrictName(
-                          selectedDistrictName || donnerupdate.recipentDistrict
-                        ).map((upazilaName, i) => (
-                          <option key={i} value={upazilaName}>
-                            {upazilaName}{" "}
-                          </option>
-                        ))}{" "}
-                      </select>{" "}
-                    </fieldset>{" "}
-                    <fieldset>
-                      {" "}
-                      <legend className="fieldset-legend">
-                        Hospital Name
-                      </legend>{" "}
-                      <input
-                        type="text"
-                        {...register("hospitalName")}
-                        className="input input-bordered w-full"
-                        placeholder="Hospital Name"
-                      />{" "}
-                    </fieldset>{" "}
-                    <fieldset>
-                      {" "}
-                      <legend className="fieldset-legend">
-                        Full address Line{" "}
-                      </legend>{" "}
-                      <input
-                        type="text"
-                        {...register("address")}
-                        className="input input-bordered w-full"
-                        placeholder="Full Address"
-                      />{" "}
-                    </fieldset>{" "}
-                  </div>{" "}
-                </div>{" "}
-              </fieldset>{" "}
+        <div className="modal-box max-w-2xl">
+          <h3 className="font-bold text-lg text-secondary mb-4">
+            Update Donation Request
+          </h3>
+          <form
+            onSubmit={handleSubmit(handleUpdateDonner)}
+            className="space-y-4"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="form-control">
+                <label className="label-text mb-1">Requester Name</label>
+                <input
+                  type="text"
+                  {...register("requesterName")}
+                  className="input input-bordered w-full bg-gray-100"
+                  readOnly
+                />
+              </div>
+              <div className="form-control">
+                <label className="label-text mb-1">Requester Email</label>
+                <input
+                  type="email"
+                  {...register("requesterEmail")}
+                  className="input input-bordered w-full bg-gray-100"
+                  readOnly
+                />
+              </div>
+              <div className="form-control">
+                <label className="label-text mb-1">Blood Group</label>
+                <select
+                  {...register("Blood")}
+                  className="select select-bordered w-full"
+                >
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                </select>
+              </div>
+              <div className="form-control">
+                <label className="label-text mb-1">Recipient Name</label>
+                <input
+                  type="text"
+                  {...register("recipientName")}
+                  className="input input-bordered w-full"
+                />
+              </div>
+              <div className="form-control">
+                <label className="label-text mb-1">District</label>
+                <select
+                  {...register("recipentDistrict")}
+                  className="select select-bordered w-full"
+                >
+                  {DistrictDuplicate.map((d, i) => (
+                    <option value={d} key={i}>
+                      {d}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-control">
+                <label className="label-text mb-1">Upazila</label>
+                <select
+                  {...register("recipientUpazila")}
+                  className="select select-bordered w-full"
+                >
+                  {getUpazilasByDistrictName(
+                    selectedDistrictName || donnerupdate?.recipentDistrict,
+                  ).map((u, i) => (
+                    <option key={i} value={u}>
+                      {u}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-control">
+                <label className="label-text mb-1">Date</label>
+                <input
+                  type="date"
+                  {...register("donetionDate")}
+                  className="input input-bordered w-full"
+                />
+              </div>
+              <div className="form-control">
+                <label className="label-text mb-1">Time</label>
+                <input
+                  type="time"
+                  {...register("donetionTime")}
+                  className="input input-bordered w-full"
+                />
+              </div>
+            </div>
+            <div className="form-control mt-2">
+              <label className="label-text mb-1">Hospital Name</label>
               <input
-                className="btn btn-primary bg-secondary text-white hover:bg-red-800 border-none mt-4"
+                type="text"
+                {...register("hospitalName")}
+                className="input input-bordered w-full"
+              />
+            </div>
+            <div className="form-control">
+              <label className="label-text mb-1">Address</label>
+              <input
+                type="text"
+                {...register("address")}
+                className="input input-bordered w-full"
+              />
+            </div>
+            <div className="form-control">
+              <label className="label-text mb-1">Message</label>
+              <textarea
+                {...register("requestMessage")}
+                className="textarea textarea-bordered w-full h-20"
+              ></textarea>
+            </div>
+            <div className="flex justify-end gap-3 mt-6">
+              <button
                 type="submit"
-                value="Update"
-              />{" "}
-            </form>{" "}
-          </div>{" "}
-          <div className="modal-action">
-            {" "}
-            <form method="dialog">
-              {" "}
-              <button className="btn">Close</button>{" "}
-            </form>{" "}
-          </div>{" "}
-        </div>{" "}
-      </dialog>{" "}
+                className="btn btn-primary bg-red-600 hover:bg-red-700 border-none"
+              >
+                Update
+              </button>
+              <button
+                type="button"
+                onClick={() => UpdateModalRef.current.close()}
+                className="btn"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </dialog>
     </div>
   );
 };

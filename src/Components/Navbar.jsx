@@ -1,29 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Logo from "../assets/Logo.png";
-import { Link, NavLink } from "react-router"; 
+import { Link, NavLink } from "react-router";
 import UseAuth from "../AuthProvider/UseAuth";
 import { toast } from "react-toastify";
+import { HiOutlineMoon, HiOutlineSun } from "react-icons/hi";
 import { BiLogOut } from "react-icons/bi";
-import { FiMenu, FiX } from "react-icons/fi";
+import { FiMenu, FiX, FiSun, FiMoon } from "react-icons/fi";
 
 const Navbar = () => {
   const { user, LogOutUser } = UseAuth();
   const [isHovering, setIsHovering] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const handleMouseEnter = () => {
-    setIsHovering(true);
-  };
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
-  const handleMouseLeave = () => {
-    setIsHovering(false);
-  };
+  useEffect(() => {
+    const html = document.querySelector("html");
+    html.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
+
+  const handleMouseEnter = () => setIsHovering(true);
+  const handleMouseLeave = () => setIsHovering(false);
 
   const handleLogOut = () => {
     LogOutUser()
-      .then(() => {
-        toast.success("LogOut Successfull.");
-      })
+      .then(() => toast.success("LogOut Successfull."))
       .catch((error) => {
         console.error("LogOut Error:", error);
         toast.error("LogOut failed.");
@@ -65,12 +69,25 @@ const Navbar = () => {
             <img className="w-[120px] sm:w-[150px]" src={Logo} alt="Logo" />
           </Link>
         </div>
+
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal p-0 space-x-2 text-black">{Links}</ul>
+          <ul className="menu menu-horizontal p-0 space-x-2 text-black">
+            {Links}
+          </ul>
         </div>
 
-
         <div className="navbar-end flex items-center gap-3">
+          <button
+            onClick={toggleTheme}
+            className="btn btn-ghost bg btn-circle hover:bg-primary/10 group transition-colors"
+          >
+            {theme === "light" ? (
+              <HiOutlineMoon className="text-2xl text-white group-hover:rotate-12 transition-transform" />
+            ) : (
+              <HiOutlineSun className="text-2xl text-yellow-500 animate-pulse" />
+            )}
+          </button>
+
           <div className="hidden lg:flex items-center gap-3">
             {user && (
               <div
@@ -80,7 +97,7 @@ const Navbar = () => {
               >
                 <img
                   className="rounded-full border-3 border-white h-12 w-12 object-cover transition duration-300 hover:scale-105"
-                  src={user.photoURL || "default-avatar.png"} // Fallback image for safety
+                  src={user.photoURL || "default-avatar.png"}
                   alt="User Profile"
                 />
                 {isHovering && (
@@ -90,12 +107,13 @@ const Navbar = () => {
                 )}
               </div>
             )}
+
             {user ? (
               <button
                 onClick={handleLogOut}
                 className="btn btn-sm text-sm bg-white text-red-700 hover:bg-gray-100 border-0 flex items-center gap-2 font-semibold transition duration-300"
               >
-                <BiLogOut size={20} />{" "}
+                <BiLogOut size={20} />
                 <span className="hidden sm:inline">Log Out</span>
               </button>
             ) : (
@@ -112,7 +130,6 @@ const Navbar = () => {
             <button
               onClick={() => setIsDrawerOpen(!isDrawerOpen)}
               className="p-2 text-white transition duration-300 focus:outline-none"
-              aria-label="Toggle Menu"
             >
               {isDrawerOpen ? <FiX size={28} /> : <FiMenu size={28} />}
             </button>
@@ -126,32 +143,34 @@ const Navbar = () => {
             className="fixed inset-0 bg-black opacity-50"
             onClick={() => setIsDrawerOpen(false)}
           ></div>
-          <div className="fixed top-0 right-0 h-full w-64 bg-white shadow-xl p-4 transform transition-transform duration-300 ease-in-out">
+
+          <div className="fixed top-0 right-0 h-full w-64 bg-white text-black dark:bg-gray-900 shadow-xl p-4 transform transition-transform duration-300 ease-in-out">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-red-700">Menu</h2>
               <button
                 onClick={() => setIsDrawerOpen(false)}
-                className="text-gray-700 hover:text-red-700"
+                className="text-gray-700 dark:text-gray-200 hover:text-red-700"
               >
                 <FiX size={24} />
               </button>
             </div>
-            <ul className="space-y-3 border-b pb-4">{Links}</ul>
 
+            <ul className="space-y-3 border-b pb-4">{Links}</ul>
 
             <div className="mt-6 space-y-4">
               {user && (
-                <div className="flex items-center gap-3 p-2 bg-gray-100 rounded-lg">
+                <div className="flex items-center gap-3 p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
                   <img
                     className="rounded-full h-10 w-10 object-cover border-2 border-red-700"
                     src={user.photoURL || "default-avatar.png"}
                     alt="User Profile"
                   />
-                  <span className="font-semibold text-gray-800">
+                  <span className="font-semibold text-gray-800 dark:text-gray-200">
                     {user.displayName || "User Profile"}
                   </span>
                 </div>
               )}
+
               {user ? (
                 <button
                   onClick={handleLogOut}
