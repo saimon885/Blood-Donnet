@@ -64,10 +64,12 @@ const VolenteerAllDonor = () => {
     switch (status) {
       case "completed":
         return "badge badge-success text-white";
+      case "Done":
+        return "badge badge-success text-white";
       case "pending":
         return "badge badge-error text-white";
       case "in-progress":
-        return "badge badge-warning text-white";
+        return "badge text-warning";
       case "canceled":
         return "badge badge-error text-white";
       default:
@@ -129,12 +131,18 @@ const VolenteerAllDonor = () => {
                       >
                         <FaRegEye />
                       </button>
-                      <button
-                        onClick={() => updateStatus(donner._id, "completed")}
-                        className="btn btn-square btn-sm btn-success text-white"
-                      >
-                        <FaCheckCircle />
-                      </button>
+                      {donner.status === "Done" ? (
+                        <button
+                          onClick={() => updateStatus(donner._id, "completed")}
+                          className="btn btn-square btn-sm btn-success text-white"
+                        >
+                          <FaCheckCircle />
+                        </button>
+                      ) : (
+                        <button className="btn btn-disabled btn-sm btn-success text-white">
+                          <FaCheckCircle />
+                        </button>
+                      )}
                       <button
                         onClick={() => updateStatus(donner._id, "canceled")}
                         className="btn btn-square btn-sm btn-error text-white"

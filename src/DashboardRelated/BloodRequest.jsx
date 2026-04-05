@@ -68,6 +68,7 @@ const BloodRequest = () => {
       });
     }
   };
+  console.log(filteredDonors);
 
   return (
     <div>
@@ -184,30 +185,47 @@ const BloodRequest = () => {
               : ""}
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-5">
             {filteredDonors.map((donor, index) => (
               <div
                 key={index}
-                className=" p-6 rounded-lg shadow-md border border-red-200 hover:shadow-xl transition duration-300"
+                className="bg-white p-5 rounded-2xl shadow-md border border-gray-100 hover:shadow-xl transition duration-300"
               >
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-xl font-extrabold text-red-600">
-                    {donor.bloodGroup || "Group N/A"}{" "}
+                <div className="flex items-center gap-4 mb-4">
+                  <img
+                    src={donor.photoURL || "https://via.placeholder.com/150"}
+                    alt="donor"
+                    className="w-16 h-20 object-cover rounded-md border"
+                  />
+
+                  <div className="flex-1">
+                    <p className="text-lg font-semibold text-gray-800">
+                      {donor.displayName || "N/A"}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {donor.district || "District N/A"},{" "}
+                      {donor.upazila || "Upazila N/A"}
+                    </p>
+                  </div>
+
+                  <span className="text-lg font-bold text-red-500">
+                    {donor.bloodGroup || "N/A"}
                   </span>
-                  <span className="text-sm font-semibold  text-right">
-                    {donor.district || "District N/A"},
-                    {donor.upazila || "Upazila N/A"}{" "}
-                  </span>{" "}
-                </div>{" "}
-                <p className="text-lg font-medium ">
-                  {donor.displayName || "N/A"}
+                </div>
+
+                <p className="text-sm text-gray-600 break-all">
+                  {donor.email || "N/A"}
                 </p>
-                <p className="">Contact: {donor.contactNumber || "N/A"}</p>
-                <button className="mt-3 btn btn-sm bg-red-500  hover:bg-red-600">
+
+                <a
+                  target="_blank"
+                  href={`mailto:${donor.email}`}
+                  className="btn mt-4 w-full py-2 rounded-lg bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition"
+                >
                   Request Contact
-                </button>
+                </a>
               </div>
-            ))}{" "}
+            ))}
           </div>
           {filteredDonors.length === 0 && (
             <div className="text-center text-gray-500 p-10  rounded-lg shadow-md">

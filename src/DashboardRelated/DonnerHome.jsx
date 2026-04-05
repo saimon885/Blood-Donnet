@@ -2,7 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useRef, useState } from "react";
 import UseAuth from "../AuthProvider/UseAuth";
 import UseAxiosSecure from "../AuthProvider/UseAxiosSecure";
-import { FaRegEye, FaTint } from "react-icons/fa";
+import {
+  FaClock,
+  FaMapMarkerAlt,
+  FaRegEye,
+  FaTint,
+  FaUserAlt,
+} from "react-icons/fa";
 import { MdCancel, MdDoneOutline, MdModeEdit } from "react-icons/md";
 import { ImBin2 } from "react-icons/im";
 import { useForm, useWatch } from "react-hook-form";
@@ -225,91 +231,99 @@ const DonnerHome = () => {
               <>
                 {/* --- Desktop View (Large Screens) --- */}
                 <div className="hidden lg:block overflow-x-auto rounded-xl shadow-lg border border-gray-200">
-                  <table className="table w-full">
-                    <thead className="bg-red-700 text-white sticky top-0">
+                  <table className="table w-full border-collapse">
+                    <thead className="bg-[#b20000] text-white">
                       <tr>
-                        <th className="py-3 px-4">#</th>
-                        <th className="py-3 px-4">Recipient Name</th>
-                        <th className="py-3 px-4">Location</th>
-                        <th className="py-3 px-4">Date & Time</th>
-                        <th className="py-3 px-4">Blood Group</th>
-                        <th className="py-3 px-4">Status</th>
-                        <th className="py-3 px-4 text-center">Actions</th>
-                        <th className="py-3 px-4 text-center">
-                          Status Actions
-                        </th>
+                        <th className="py-4 px-4 text-center">#</th>
+                        <th className="py-4 px-4">Recipient</th>
+                        <th className="py-4 px-4">Location</th>
+                        <th className="py-4 px-4">Date & Time</th>
+                        <th className="py-4 px-4 text-center">Blood</th>
+                        <th className="py-4 px-4 text-center">Status</th>
+                        <th className="py-4 px-4 text-center">Actions</th>
+                        <th className="py-4 px-4 text-center">Manage</th>
                       </tr>
                     </thead>
                     <tbody>
                       {donners.map((donner, index) => (
                         <tr
                           key={donner._id}
-                          className="border-b hover:bg-red-50 transition duration-150"
+                          className="border-b hover:bg-gray-50 transition duration-150"
                         >
-                          <th className="px-4 py-3 text-gray-700">{index + 1}</th>
-                          <td className="px-4 py-3 font-medium text-gray-700">
+                          <th className="px-4 py-4 text-center font-bold text-black">
+                            {index + 1}
+                          </th>
+                          <td className="px-4 py-4 font-bold text-black">
                             {donner.recipientName}
                           </td>
-                          <td className="px-4 py-3 text-sm text-gray-700">
+                          <td className="px-4 py-4 text-sm text-gray-600">
                             {donner.recipentDistrict}, {donner.recipientUpazila}
                           </td>
-                          <td className="px-4 py-3 font-semibold text-blue-600">
+                          <td className="px-4 py-4 font-semibold text-blue-500">
                             {formatDateTime(
                               donner.donetionDate,
                               donner.donetionTime,
                             )}
                           </td>
-                          <td className="px-4 py-3 font-bold text-red-700">
+                          <td className="px-4 py-4 font-bold text-red-600 text-center">
                             {donner.Blood}
                           </td>
-                          <td
-                            className={`px-4 py-3 font-bold uppercase ${
-                              donner.status === "Done" ||
-                              donner.status === "completed"
-                                ? "text-green-600"
-                                : donner.status === "in-progress"
-                                  ? "text-yellow-600"
-                                  : "text-red-600"
-                            }`}
-                          >
-                            {donner.status}
+                          <td className="px-4 py-4 text-center">
+                            <span
+                              className={`px-4 py-1.5 rounded-full font-bold text-sm inline-block min-w-[100px] ${
+                                donner.status === "Done" ||
+                                donner.status === "completed"
+                                  ? "bg-[#00d084] text-white"
+                                  : donner.status === "in-progress"
+                                    ? "bg-amber-50 text-amber-600 border border-amber-100"
+                                    : "bg-[#ff7675] text-white"
+                              }`}
+                            >
+                              {donner.status === "in-progress"
+                                ? "in-progress"
+                                : donner.status}
+                            </span>
                           </td>
-                          <td className="flex items-center justify-center gap-2 px-4 py-3">
-                            <button
-                              onClick={() => handleViews(donner)}
-                              className="btn btn-sm bg-blue-500 text-white"
-                            >
-                              <FaRegEye />
-                            </button>
-                            <button
-                              onClick={() => handleEditDonnetion(donner)}
-                              className="btn btn-sm bg-yellow-500 text-white"
-                            >
-                              <MdModeEdit />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(donner._id)}
-                              className="btn btn-sm bg-red-500 text-white"
-                            >
-                              <ImBin2 />
-                            </button>
+                          <td className="px-4 py-4">
+                            <div className="flex gap-2 justify-center">
+                              <button
+                                onClick={() => handleViews(donner)}
+                                className="p-2 bg-[#00c3ff] text-white rounded shadow hover:bg-cyan-500 transition-colors"
+                              >
+                                <FaRegEye />
+                              </button>
+                              <button
+                                onClick={() => handleEditDonnetion(donner)}
+                                className="p-2 bg-[#ffb900] text-white rounded shadow hover:bg-amber-600 transition-colors"
+                              >
+                                <MdModeEdit />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(donner._id)}
+                                className="p-2 bg-[#ff6b81] text-white rounded shadow hover:bg-rose-500 transition-colors"
+                              >
+                                <ImBin2 />
+                              </button>
+                            </div>
                           </td>
-                          <td className="text-center">
-                            {donner.status === "in-progress" && (
+                          <td className="px-4 py-4 text-center text-gray-400 font-semibold">
+                            {donner.status === "in-progress" ? (
                               <div className="flex gap-2 justify-center">
                                 <button
                                   onClick={() => handleConfirm(donner)}
-                                  className="btn btn-sm bg-green-500 text-white"
+                                  className="p-2 bg-[#00d084] text-white rounded shadow hover:bg-green-600"
                                 >
                                   <MdDoneOutline />
                                 </button>
                                 <button
                                   onClick={() => handleCancel(donner)}
-                                  className="btn btn-sm bg-red-500 text-white"
+                                  className="p-2 bg-[#ff7675] text-white rounded shadow hover:bg-red-600"
                                 >
                                   <MdCancel />
                                 </button>
                               </div>
+                            ) : (
+                              "N/A"
                             )}
                           </td>
                         </tr>
@@ -318,92 +332,93 @@ const DonnerHome = () => {
                   </table>
                 </div>
 
-                {/* --- Mobile View (Small Screens - Cards) --- */}
                 <div className="lg:hidden grid grid-cols-1 gap-4">
                   {donners.map((donner) => (
                     <div
                       key={donner._id}
-                      className="bg-white p-5 rounded-xl shadow border border-gray-100"
+                      className="bg-white p-5 rounded-2xl shadow-md border border-gray-100"
                     >
-                      <div className="flex justify-between items-start mb-3">
-                        <div>
-                          <h3 className="font-bold text-lg text-gray-800">
-                            {donner.recipientName}
-                          </h3>
-                          <p className="text-sm text-gray-500">
-                            {donner.recipentDistrict}, {donner.recipientUpazila}
-                          </p>
-                        </div>
-                        <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full font-bold text-sm">
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-bold text-xl text-black flex items-center gap-2">
+                          <FaUserAlt className="text-red-500 text-base" />
+                          {donner.recipientName}
+                        </h3>
+                        <span className="font-bold text-xl text-red-600">
                           {donner.Blood}
                         </span>
                       </div>
 
-                      <div className="space-y-2 mb-4">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-500">Date & Time:</span>
-                          <span className="font-semibold text-blue-600">
-                            {formatDateTime(
-                              donner.donetionDate,
-                              donner.donetionTime,
-                            )}
-                          </span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-500">Status:</span>
+                      <div className="flex items-center gap-2 text-gray-500 font-medium mb-1">
+                        <FaMapMarkerAlt className="text-gray-400" />
+                        <span>
+                          {donner.recipentDistrict}, {donner.recipientUpazila}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2 text-blue-600 font-bold mb-4">
+                        <FaClock />
+                        <span>
+                          {formatDateTime(
+                            donner.donetionDate,
+                            donner.donetionTime,
+                          )}
+                        </span>
+                      </div>
+
+                      <div className="flex justify-between items-center mt-2">
+                        <div>
                           <span
-                            className={`font-bold uppercase ${
+                            className={`px-4 py-1.5 rounded-lg text-white font-bold text-sm ${
                               donner.status === "Done" ||
                               donner.status === "completed"
-                                ? "text-green-600"
+                                ? "bg-emerald-500"
                                 : donner.status === "in-progress"
-                                  ? "text-yellow-600"
-                                  : "text-red-600"
+                                  ? "bg-amber-500"
+                                  : "bg-red-500"
                             }`}
                           >
                             {donner.status}
                           </span>
                         </div>
-                      </div>
 
-                      <div className="flex justify-between items-center pt-3 border-t">
                         <div className="flex gap-2">
                           <button
                             onClick={() => handleViews(donner)}
-                            className="btn btn-xs bg-blue-500 text-white p-1"
+                            className="btn btn-sm bg-cyan-400 text-white rounded-lg shadow-sm hover:bg-cyan-500 transition-colors"
                           >
                             <FaRegEye />
                           </button>
                           <button
                             onClick={() => handleEditDonnetion(donner)}
-                            className="btn btn-xs bg-yellow-500 text-white p-1"
+                            className="btn btn-sm bg-amber-500 text-white rounded-lg shadow-sm hover:bg-amber-600 transition-colors"
                           >
                             <MdModeEdit />
                           </button>
                           <button
                             onClick={() => handleDelete(donner._id)}
-                            className="btn btn-xs bg-red-500 text-white p-1"
+                            className="btn btn-sm bg-rose-400 text-white rounded-lg shadow-sm hover:bg-rose-500 transition-colors"
                           >
                             <ImBin2 />
                           </button>
                         </div>
-                        {donner.status === "in-progress" && (
-                          <div className="flex gap-1">
-                            <button
-                              onClick={() => handleConfirm(donner)}
-                              className="btn btn-xs bg-green-500 text-white"
-                            >
-                              Done
-                            </button>
-                            <button
-                              onClick={() => handleCancel(donner)}
-                              className="btn btn-xs bg-red-500 text-white"
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        )}
                       </div>
+
+                      {donner.status === "in-progress" && (
+                        <div className="mt-4 pt-4 border-t flex gap-3">
+                          <button
+                            onClick={() => updateStatus(donner, "Done")}
+                            className="btn btn-success btn-sm w-6/12"
+                          >
+                            <MdDoneOutline /> Done
+                          </button>
+                          <button
+                            onClick={() => updateStatus(donner, "Cancel")}
+                            className="btn btn-error btn-sm w-6/12"
+                          >
+                            <MdCancel /> Cancel
+                          </button>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>

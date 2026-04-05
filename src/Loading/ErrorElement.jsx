@@ -20,7 +20,7 @@ const ErrorElement = () => {
               className="text-9xl font-extrabold text-red-600 dark:text-indigo-500 
                                        animate-pulse"
             >
-              404
+               404
             </h1>
             <FaGlobe className="absolute bottom-4 right-[-20px] text-red-400 dark:text-indigo-300 w-12 h-12" />
           </div>

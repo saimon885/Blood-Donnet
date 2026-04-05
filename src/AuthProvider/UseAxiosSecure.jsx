@@ -6,12 +6,14 @@ const axiosSecure = axios.create({
 });
 const UseAxiosSecure = () => {
   const { user } = UseAuth();
+
   useEffect(() => {
     axiosSecure.interceptors.request.use((config) => {
       config.headers.Authorization = `Bearer ${user?.accessToken}`;
       return config;
     });
   }, [user]);
+
   return axiosSecure;
 };
 

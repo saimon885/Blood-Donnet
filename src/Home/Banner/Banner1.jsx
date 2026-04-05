@@ -1,91 +1,112 @@
 import React, { useEffect } from "react";
-import bannerImg from "../../assets/Banner1IMG.jpeg";
 import { Link } from "react-router";
-import { useTypewriter } from "react-simple-typewriter";
 import AOS from "aos";
 import UseAuth from "../../AuthProvider/UseAuth";
-const Banner1 = () => {
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/pagination";
+
+const BannerSlide = ({ bg, title,  desc }) => {
   const { user } = UseAuth();
-  const [text] = useTypewriter({
-    words: [" Donate Blood Today."],
-    loop: {},
-    typeSpeed: 120,
-    deleteSpeed: 80,
-  });
-  useEffect(() => {
-    AOS.init({
-      duration: 500,
-      once: true,
-    });
-  }, []);
+
+
+
   return (
-    <div className="bg-[#7f0000]">
-      <div className="flex flex-col md:flex-row justify-between items-center gap-10 mx-10 py-20 ">
-        <div data-aos="fade-right" className="text-center space-y-5 text-white">
-          <h1 className="text-3xl md:text-4xl font-bold text-white">
-            Save Lives.
-            <span className="text-yellow-500">{text}</span>{" "}
+    <div
+      className="w-full min-h-[85vh] flex items-center bg-cover bg-center relative"
+      style={{ backgroundImage: `url(${bg})` }}
+    >
+      <div className="absolute inset-0 bg-gradient-to-r from-[#7f0000]/90 to-black/70"></div>
+
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-5 md:px-10">
+        <div
+          data-aos="fade-right"
+          className="max-w-xl text-white space-y-6"
+        >
+          <h1 className="text-3xl md:text-5xl font-bold leading-tight">
+            {title}
+            <span className="text-yellow-400 block mt-2">Save Lives Today</span>
           </h1>
-          <p className="md:text-xl">
-            Your donation can give someone a second chance at life. Join
-            thousands of heroes making a difference every day in Bangladesh.
+
+          <p className="text-gray-200 text-base md:text-lg leading-relaxed">
+            {desc}
           </p>
-          <p className="text-xl">Contact Us : +8801992644935</p>
-          <div className="flex justify-center items-center gap-6">
-            <div className="p-4 bg-[#ffffffd7] rounded-2xl transition-all duration-300 hover:-translate-y-2">
-              <img
-                className="w-[30px]"
-                src="https://cdn-icons-png.flaticon.com/128/893/893529.png"
-                alt=""
-              />
-            </div>
-            <div className="p-4 bg-[#ffffffd7] rounded-2xl transition-all duration-300 hover:-translate-y-2">
-              <img
-                className="w-[30px]"
-                src="https://cdn-icons-png.flaticon.com/128/865/865969.png"
-                alt=""
-              />
-            </div>
-            <div className="p-4 bg-[#ffffffd7] rounded-2xl transition-all duration-300 hover:-translate-y-2">
-              <img
-                className="w-[30px]"
-                src="https://cdn-icons-png.flaticon.com/128/8011/8011552.png"
-                alt=""
-              />
-            </div>
-            <div className="p-4 bg-[#ffffffd7] rounded-2xl transition-all duration-300 hover:-translate-y-2">
-              <img
-                className="w-[30px]"
-                src="https://cdn-icons-png.flaticon.com/128/1843/1843467.png"
-                alt=""
-              />
-            </div>
-          </div>
-          <div className="flex justify-center items-center gap-3 mx-auto">
+
+          <div className="flex flex-wrap gap-4 pt-2">
             {user ? (
-              <div className="btn text-[18px] rounded-2xl">Donate Now</div>
+              <button className="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-xl font-semibold transition">
+                Donate Now
+              </button>
             ) : (
-              <Link to={"/register"} className="btn text-[18px] rounded-2xl">
+              <Link
+                to="/register"
+                className="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-xl font-semibold transition"
+              >
                 Donate Now
               </Link>
             )}
+
             <Link
-              to={"/search-blood-requests"}
-              className="btn text-[18px] hover:bg-white hover:text-black bg-transparent rounded-2xl text-white "
+              to="/search-blood-requests"
+              className="px-6 py-3 border border-white rounded-xl hover:bg-white hover:text-black transition font-semibold"
             >
-              Find Donnor
+              Find Donor
             </Link>
           </div>
-        </div>
-        <div data-aos="fade-left">
-          <img
-            className="w-[500px] shadow-2xl rounded-2xl"
-            src={bannerImg}
-            alt=""
-          />
+
+          <div className="flex gap-6 pt-4 text-sm md:text-base text-gray-300">
+            <span>🩸 Safe Donation</span>
+            <span>⚡ Quick Response</span>
+            <span>❤️ Save Lives</span>
+          </div>
         </div>
       </div>
     </div>
+  );
+};
+
+const Banner1 = () => {
+  useEffect(() => {
+    AOS.init({ duration: 700, once: true });
+  }, []);
+
+  return (
+    <Swiper
+      modules={[Autoplay, Pagination]}
+      autoplay={{ delay: 3500, disableOnInteraction: false }}
+      loop={true}
+      pagination={{ clickable: true }}
+    >
+      <SwiperSlide>
+        <BannerSlide
+          bg="https://images.unsplash.com/photo-1584515933487-779824d29309"
+          title="Donate Blood"
+          highlight="Save Lives Today"
+          desc="Your one donation can save multiple lives. Join our mission and help patients in need across Bangladesh."
+        />
+      </SwiperSlide>
+
+      <SwiperSlide>
+        <BannerSlide
+          bg="https://images.unsplash.com/photo-1615461066841-6116e61058f4"
+          title="Be a Lifesaver"
+          highlight="Give Blood, Give Hope"
+          desc="Every drop counts. Your contribution can bring hope to families waiting for urgent blood support."
+        />
+      </SwiperSlide>
+
+      <SwiperSlide>
+        <BannerSlide
+          bg="https://images.unsplash.com/photo-1579154204601-01588f351e67"
+          title="Emergency Support"
+          highlight="Your Blood Matters"
+          desc="In critical moments, blood donors become heroes. Step forward and make a real impact today."
+        />
+      </SwiperSlide>
+    </Swiper>
   );
 };
 

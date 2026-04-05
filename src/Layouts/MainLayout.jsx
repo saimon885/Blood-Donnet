@@ -2,10 +2,12 @@ import React from "react";
 import Navbar from "../Components/Navbar";
 import { Outlet } from "react-router";
 import Footer from "../Components/Footer";
+import ScrollToTop from "../ScrollToTop ";
 
 const MainLayout = () => {
   return (
     <div>
+      <ScrollToTop></ScrollToTop>
       <div className="fixed w-full z-50">
         <Navbar></Navbar>
       </div>

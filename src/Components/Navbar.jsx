@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Logo from "../assets/Logo.png";
 import { Link, NavLink } from "react-router";
 import UseAuth from "../AuthProvider/UseAuth";
@@ -11,16 +11,6 @@ const Navbar = () => {
   const { user, LogOutUser } = UseAuth();
   const [isHovering, setIsHovering] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
-
-  useEffect(() => {
-    const html = document.querySelector("html");
-    html.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
-  }, [theme]);
-
-  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
 
   const handleMouseEnter = () => setIsHovering(true);
   const handleMouseLeave = () => setIsHovering(false);
@@ -52,11 +42,11 @@ const Navbar = () => {
       <NavLink className={navLinkClasses} to={"/search-blood-requests"}>
         Search Blood
       </NavLink>
-      <NavLink className={navLinkClasses} to={"/dashboard"}>
-        Dashboard
-      </NavLink>
       <NavLink className={navLinkClasses} to={"/funding"}>
         Funding
+      </NavLink>{" "}
+      <NavLink className={navLinkClasses} to={"/dashboard"}>
+        Dashboard
       </NavLink>
     </div>
   );
@@ -71,23 +61,10 @@ const Navbar = () => {
         </div>
 
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal p-0 space-x-2 text-black">
-            {Links}
-          </ul>
+          <ul className="menu menu-horizontal p-0 space-x-2 ">{Links}</ul>
         </div>
 
         <div className="navbar-end flex items-center gap-3">
-          <button
-            onClick={toggleTheme}
-            className="btn btn-ghost bg btn-circle hover:bg-primary/10 group transition-colors"
-          >
-            {theme === "light" ? (
-              <HiOutlineMoon className="text-2xl text-white group-hover:rotate-12 transition-transform" />
-            ) : (
-              <HiOutlineSun className="text-2xl text-yellow-500 animate-pulse" />
-            )}
-          </button>
-
           <div className="hidden lg:flex items-center gap-3">
             {user && (
               <div
@@ -114,7 +91,7 @@ const Navbar = () => {
                 className="btn btn-sm text-sm bg-white text-red-700 hover:bg-gray-100 border-0 flex items-center gap-2 font-semibold transition duration-300"
               >
                 <BiLogOut size={20} />
-                <span className="hidden sm:inline">Log Out</span>
+                <span className="hidden sm:inline">LogOut</span>
               </button>
             ) : (
               <Link
@@ -144,12 +121,12 @@ const Navbar = () => {
             onClick={() => setIsDrawerOpen(false)}
           ></div>
 
-          <div className="fixed top-0 right-0 h-full w-64 bg-white text-black dark:bg-gray-900 shadow-xl p-4 transform transition-transform duration-300 ease-in-out">
+          <div className="fixed top-0 right-0 h-full w-64 bg-white text-black  shadow-xl p-4 transform transition-transform duration-300 ease-in-out">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-red-700">Menu</h2>
               <button
                 onClick={() => setIsDrawerOpen(false)}
-                className="text-gray-700 dark:text-gray-200 hover:text-red-700"
+                className="  hover:text-red-700"
               >
                 <FiX size={24} />
               </button>

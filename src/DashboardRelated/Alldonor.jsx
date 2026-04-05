@@ -141,7 +141,7 @@ const Alldonor = () => {
       case "done":
         return "badge badge-success text-white";
       case "in-progress":
-        return "badge badge-warning text-white";
+        return "badge text-warning ";
       default:
         return "badge badge-error text-white";
     }
