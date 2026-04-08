@@ -17,6 +17,7 @@ import Swal from "sweetalert2";
 import UseRole from "../AuthProvider/UseRole";
 import Loading from "../Loading/Loading";
 import { format, parse } from "date-fns";
+import AdminDashboardHome from "./AdminDashboardHome";
 
 const formatDateTime = (dateStr, timeStr) => {
   if (!dateStr || !timeStr) return "N/A";
@@ -47,38 +48,6 @@ const DonnerHome = () => {
     },
     enabled: !!user?.email && role === "donor",
   });
-
-  const { data: totalDonorsData, isLoading: isDonorsCountLoading } = useQuery({
-    queryKey: ["users-role-count"],
-    queryFn: async () => {
-      const result = await axiosSecure.get("/users/allusers/Role");
-      return result.data;
-    },
-    enabled: role === "admin" || role === "volunteer",
-  });
-
-  const { data: totalFundsData, isLoading: isFundsLoading } = useQuery({
-    queryKey: ["checkout-session-status"],
-    queryFn: async () => {
-      const result = await axiosSecure.get("/checkout-session/paymentStatus");
-      return result.data;
-    },
-    enabled: role === "admin" || role === "volunteer",
-  });
-
-  const totalDonorCount = totalDonorsData?.[0]?.count || 0;
-  const totalFundAmount = totalFundsData?.[0]?.totalFund || 0;
-
-  const { data: totalDonnations } = useQuery({
-    queryKey: ["donners-DonnetionCount"],
-    queryFn: async () => {
-      const result = await axiosSecure.get("/donners/DonnetionCount");
-      return result.data;
-    },
-    enabled: role === "admin" || role === "volunteer",
-  });
-
-  const totalDonnation = totalDonnations?.[0]?.count || 0;
 
   const donners = donnerd.slice(0, 3);
 
@@ -205,9 +174,9 @@ const DonnerHome = () => {
 
   if (
     isDonnerLoading ||
-    isRoleLoading ||
-    isDonorsCountLoading ||
-    isFundsLoading
+    isRoleLoading 
+    // isDonorsCountLoading
+    // isFundsLoading
   )
     return <Loading />;
 
@@ -648,39 +617,7 @@ const DonnerHome = () => {
           </div>
         </div>
       ) : (
-        <div className="p-8 bg-white rounded-xl shadow-lg border-l-4 border-blue-500">
-          <h2 className="text-2xl font-semibold text-blue-800 mb-6">
-            Dashboard Overview for {role?.toUpperCase() || "User"}
-          </h2>
-
-          <div className="stats stats-vertical lg:stats-horizontal shadow w-full">
-            <div className="stat">
-              <div className="stat-figure text-blue-500 text-3xl">
-                <FaRegEye />
-              </div>
-              <div className="stat-title">Total Donors</div>
-              <div className="stat-value text-blue-600">{totalDonorCount}+</div>
-            </div>
-
-            <div className="stat">
-              <div className="stat-figure text-green-500 text-3xl">
-                <MdDoneOutline />
-              </div>
-              <div className="stat-title">Total Funding</div>
-              <div className="stat-value text-green-600">
-                {totalFundAmount}$
-              </div>
-            </div>
-
-            <div className="stat">
-              <div className="stat-figure text-red-500 text-3xl">
-                <FaTint />
-              </div>
-              <div className="stat-title">Total Donnations</div>
-              <div className="stat-value text-red-600">{totalDonnation}+</div>
-            </div>
-          </div>
-        </div>
+        <AdminDashboardHome></AdminDashboardHome>
       )}
     </div>
   );
